@@ -678,6 +678,12 @@ input,textarea,select{font-size:16px!important}
 .prog span:nth-child(4) b{background-position:60% 0!important}
 .prog span:nth-child(5) b{background-position:80% 0!important}
 .prog span:nth-child(6) b{background-position:100% 0!important}
+
+/* v14: rating dots follow the live persona colour */
+.dot.on{background:var(--pc)!important;color:#fff;box-shadow:0 0 14px -3px var(--pc)}
+.dot.fill{background:color-mix(in srgb,var(--pc) 26%,transparent)!important;color:#dfe9ff}
+.persona-live{background:color-mix(in srgb,var(--pc) 16%,transparent)}
+.dot,.persona-live,.persona-live i{transition:background .3s,box-shadow .3s,color .2s}
 </style>
 
 </head>
@@ -819,13 +825,13 @@ const LEVELS=[
  {name:'Pódium',d:'Ladíš detaily: příběhy, pointy, práce se sálem a improvizace. Individuálně a na kameru.',ws:'TOP Speaker · Pódium',meta:'Individuálně · nahrávka ve studiu · rozbor videa'}
 ];
 const PERSONAS={
- objev:{name:'Objevitel',color:'#3352b8',icon:'seed',d:'Jsi na začátku a máš největší prostor pro skok. Základ ti dá jistotu, na které se dá stavět.'},
- kotva:{name:'Kotva',color:'#3a62d4',icon:'anchor',d:'Klid je tvoje síla. Když mluvíš, lidi se vedle tebe uklidní a věří ti.'},
- strat:{name:'Stratég',color:'#3f72ec',icon:'target',d:'Víš, co chceš říct, a dojdeš k pointě. Jasnost je tvoje síla.'},
- moder:{name:'Moderátor',color:'#4682ff',icon:'volume',d:'Hlasem udržíš pozornost. Tempo, pauzy a barva hlasu jsou tvůj nástroj.'},
- magnet:{name:'Magnet',color:'#4f92ff',icon:'magnet',d:'Působíš dřív, než promluvíš. Tělo a oční kontakt ti otevírají dveře.'},
- vypr:{name:'Vypravěč',color:'#5aa2ff',icon:'film',d:'Lidi si pamatují tvoje příběhy. Nevyprávíš, pouštíš jim film.'},
- top:{name:'TOP Speaker',color:'#2f7dff',icon:'crown',d:'Silný ve všech oblastech. Teď ladíš detaily a hledáš vlastní styl.'}
+ objev:{name:'Objevitel',color:'#5a5fd6',icon:'seed',d:'Jsi na začátku a máš největší prostor pro skok. Základ ti dá jistotu, na které se dá stavět.'},
+ kotva:{name:'Kotva',color:'#1fb3c9',icon:'anchor',d:'Klid je tvoje síla. Když mluvíš, lidi se vedle tebe uklidní a věří ti.'},
+ strat:{name:'Stratég',color:'#3a6bff',icon:'target',d:'Víš, co chceš říct, a dojdeš k pointě. Jasnost je tvoje síla.'},
+ moder:{name:'Moderátor',color:'#2aa8ff',icon:'volume',d:'Hlasem udržíš pozornost. Tempo, pauzy a barva hlasu jsou tvůj nástroj.'},
+ magnet:{name:'Magnet',color:'#8a6cff',icon:'magnet',d:'Působíš dřív, než promluvíš. Tělo a oční kontakt ti otevírají dveře.'},
+ vypr:{name:'Vypravěč',color:'#b07cff',icon:'film',d:'Lidi si pamatují tvoje příběhy. Nevyprávíš, pouštíš jim film.'},
+ top:{name:'TOP Speaker',color:'#4f9bff',icon:'crown',d:'Silný ve všech oblastech. Teď ladíš detaily a hledáš vlastní styl.'}
 };
 const TIERS=['objev','kotva','strat','moder','magnet','vypr','top'];
 const TRAITS=[['Autenticita','heart'],['Vášeň','flame'],['Improvizace','spark'],['Plná pozornost','eye'],['Práce s nervozitou','pulse'],['Sebedůvěra','shield'],['Empatie','group'],['Zná cíl','target'],['Mindset profesionála','crown']];

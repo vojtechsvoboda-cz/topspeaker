@@ -662,6 +662,22 @@ button.lrow:hover .tile{box-shadow:inset 0 1px 0 rgba(255,255,255,.14),inset 0 0
 .hero-art .beam-wrap::after{content:"";position:absolute;left:50%;bottom:0;width:30%;height:22%;transform:translateX(-50%);background:radial-gradient(50% 100% at 50% 100%,rgba(90,150,255,.35),transparent 75%);filter:blur(8px)}
 .hero-art .rib{top:calc(29% - 60px)!important;height:120px!important;z-index:0;-webkit-mask:linear-gradient(90deg,transparent 0,#000 12%,#000 88%,transparent 100%)!important;mask:linear-gradient(90deg,transparent 0,#000 12%,#000 88%,transparent 100%)!important}
 .hero-img{z-index:1}
+
+/* v13: mobile fixes */
+html{overflow-x:hidden}
+body{overflow-x:hidden;width:100%}
+input,textarea,select{font-size:16px!important}
+.gate,.page{max-width:100vw}
+.gate{overflow:hidden}
+.hub{align-items:stretch}
+.hub-hero,.hub .doors{width:100%;margin-inline:auto}
+.prog span b{background:linear-gradient(90deg,#1f5cff 0%,#3d8bff 55%,#7cc8ff 100%)!important;background-size:600% 100%!important}
+.prog span:nth-child(1) b{background-position:0% 0!important}
+.prog span:nth-child(2) b{background-position:20% 0!important}
+.prog span:nth-child(3) b{background-position:40% 0!important}
+.prog span:nth-child(4) b{background-position:60% 0!important}
+.prog span:nth-child(5) b{background-position:80% 0!important}
+.prog span:nth-child(6) b{background-position:100% 0!important}
 </style>
 
 </head>
@@ -980,7 +996,7 @@ function hexEditor(host,scores,onChange){
 }
 
 /* ================= ROUTER ================= */
-const NAV=[{id:'app',t:'Domů',i:'home'},{id:'app-diagnostika',t:'Diagnostika',i:'compass'},{id:'app-workshopy',t:'Workshopy',i:'cal'},{id:'app-kurz',t:'Videokurz',i:'play'},{id:'app-profil',t:'Profil',i:'user'}];
+const NAV=[{id:'app',t:'Domů',i:'home'},{id:'app-diagnostika',t:'Diagnostika',i:'compass'},{id:'app-kurz',t:'Videokurz',i:'play'},{id:'app-workshopy',t:'Workshopy',i:'cal'},{id:'app-profil',t:'Profil',i:'user'}];
 const tabOf=r=>r.startsWith('app-kapitola')?'app-kurz':r.startsWith('app-workshop')?'app-workshopy':r;
 function navHTML(){return NAV.map(n=>`<button class="nav-i" data-tab="${n.id}" data-go="${n.id}">${ic(n.i)}<span>${n.t}</span></button>`).join('')}
 function setActive(r){document.querySelectorAll('[data-tab]').forEach(b=>{const on=b.dataset.tab===tabOf(r);b.classList.toggle('active',on);on?b.setAttribute('aria-current','page'):b.removeAttribute('aria-current')})}
@@ -998,7 +1014,7 @@ function vGate(){
   root.innerHTML=`<div class="gate"><form class="gate-box" id="gateForm" autocomplete="off">
      <div class="gate-icon" id="gateIcon"><div class="beam-wrap" aria-hidden="true"><i class="b1"></i><i class="b2"></i><i class="b3"></i><i class="b4"></i><i class="b5"></i></div>${tsIcon(104)}</div>
      <p class="wordmark gate-wm">TOP SPEAKER</p>
-          <div class="gate-field"><input type="password" id="gatePw" placeholder="Heslo" aria-label="Heslo" autofocus><span class="enter"><button class="btn btn-primary" type="submit">Vstoupit ${ic('arrow')}</button></span></div>
+          <div class="gate-field"><input type="password" id="gatePw" placeholder="Heslo" aria-label="Heslo"><span class="enter"><button class="btn btn-primary" type="submit">Vstoupit ${ic('arrow')}</button></span></div>
      <p class="gate-err" id="gateErr" role="alert"></p>
    </form></div>`;
   const f=$('#gateForm');

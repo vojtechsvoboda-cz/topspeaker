@@ -865,6 +865,11 @@ textarea.tin.tall{min-height:130px}
 .sent{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:14px;align-items:center;width:100%}
 @media (max-width:520px){.sent{grid-template-columns:44px minmax(0,1fr)}.sent .btn{grid-column:1/-1}}
 .cfgsum{position:sticky;top:78px;display:flex;flex-direction:column;gap:6px;background:linear-gradient(180deg,rgba(40,95,255,.2),rgba(40,95,255,.04));border-color:rgba(120,175,255,.35)}
+.sreset{margin-top:14px;padding-top:12px;border-top:1px solid var(--line,rgba(120,150,255,.14))}
+.sreset.mob{border:0;padding-top:0}@media (min-width:921px){.sreset.mob{display:none}}
+.sreset .row{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.linkbtn{display:inline-flex;align-items:center;gap:6px;background:none;border:0;padding:4px 0;color:var(--faint);font:inherit;font-size:13px;cursor:pointer;transition:color .2s}
+.linkbtn svg{width:14px;height:14px}.linkbtn:hover{color:var(--blue-2,#8fb4ff)}
 .sold{text-decoration:line-through;color:var(--faint);font-variant-numeric:tabular-nums}
 .sbig{font-size:32px;font-weight:600;letter-spacing:-.03em;line-height:1.1;font-variant-numeric:tabular-nums}
 .cfgsum .kvs{margin-top:10px}
@@ -1490,12 +1495,12 @@ async function syncRemote(){if(syncing)return syncing;syncing=(async()=>{try{
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&['konfigurator','napady'].includes(curRoute()))syncRemote()});
 function setSaveUI(t){saveState=t;document.querySelectorAll('.savest').forEach(el=>el.textContent=t)}
 
-const BASE=74000;
+const BASE=52000;
 const ADDS={pass:2000,google:2000,pairing:8000,gateway:12000,crm2:8000,videos:8000,workbook:4000,auto:4000,invoices:6000,sellCourse:8000,codes:4000};
 const ADDNAMES={pass:'Přihlášení e-mailem a heslem',google:'Přihlášení přes Google',pairing:'Automatické párování plateb',gateway:'Platební brána',crm2:'Rozšířená administrace',videos:'Videokurz s vlastními videi',workbook:'Přepis workbooku do kapitol',auto:'Automatické e-maily',invoices:'Automatické faktury',sellCourse:'Prodej videokurzu samostatně',codes:'Slevové kódy a poukazy'};
 function selectedAdds(){const a=[];if(CFG.login==='pass')a.push('pass');['google','pairing','gateway','crm2','videos','workbook','auto','invoices','sellCourse','codes'].forEach(k=>{if(CFG[k])a.push(k)});return a}
 function priceOf(){const adds=selectedAdds();const full=BASE+adds.reduce((s,k)=>s+ADDS[k],0);const intro=Math.floor(full*0.75/2000)*2000;
-  const weeks=Math.max(4,Math.round((full-24000)/62000*6/2)*2);
+  const weeks=Math.max(4,Math.round(full/62000*6/2)*2);
   let sched;if(CFG.pay==='two'){const h=Math.round(intro/2/100)*100;sched=[['Při startu',h],['Po spuštění',intro-h]]}
   else{const st=Math.round(intro/3/2000)*2000;const m=Math.round((intro-st)/8/100)*100;sched=[['Při startu',st],['Pak 8× měsíčně',m]]}
   return{full,intro,disc:full-intro,adds,weeks,sched,care:CFG.care==='year'?'<s class="strike">9 600</s> 8 000 Kč ročně':'800 Kč měsíčně'}}
@@ -1578,7 +1583,7 @@ function stepBody(id){
       <div class="card stack"><p class="t-strong">Provoz a dodání</p><div class="kvs"><div class="kv2"><span>Provoz a péče</span><span>${p.care}</span></div><div class="kv2"><span>Odhad dodání</span><span>zhruba ${p.weeks} týdnů</span></div><div class="kv2"><span>Opravy po spuštění</span><span>30 dní zdarma</span></div></div></div></div>
     <div class="card stack"><p class="t-strong">Co ještě zbývá doplnit</p><div class="todo">${todo.map(([t,ok])=>`<span class="${ok?'ok':''}">${ic(ok?'check':'clock')}${t}</span>`).join('')}</div>${todo.some(x=>!x[1])?'<button class="linkb" data-step="8">Doplnit v kroku Podklady</button>':''}</div>
     ${noteBox('shrnuti')}
-    <div class="sendbox card" id="sendBox">${CFG.sentAt?sentHTML():`<p class="t-cap">Odeslání není závazná objednávka. Výběr se uloží a na jeho základě vznikne finální rozsah.</p><button class="btn btn-primary" id="sendBtn">${ic('arrow')}Odeslat výběr</button>`}</div>`}
+    <div class="sendbox card" id="sendBox">${CFG.sentAt?sentHTML():`<p class="t-cap">Odeslání není závazná objednávka. Výběr se uloží a na jeho základě vznikne finální rozsah.</p><button class="btn btn-primary" id="sendBtn">${ic('arrow')}Odeslat výběr</button>`}</div>${resetHTML('mob')}`}
   return '';
 }
 const schedHTML=p=>p.sched.map(([t,v])=>`<div class="kv2"><span>${t}</span><span>${fmtK(v)}</span></div>`).join('');
@@ -1619,14 +1624,21 @@ function cDrawStep(){
   const sb=$('#sendBtn');if(sb)sb.onclick=async()=>{sb.disabled=true;CFG.sentAt=new Date().toISOString();CFG.updatedAt=CFG.sentAt;CFG.justSent=true;cfgSave(false);const ok=await pushCfg('sent');CFG.justSent=false;cfgSave(false);
     $('#sendBox').innerHTML=sentHTML();toast(ok?'Odesláno':'Uloženo jen v tomto prohlížeči. Zkus to prosím znovu na webu.');const b2=$('#sendBtn');if(b2)b2.onclick=()=>cDrawStep()};
 }
+let resetAsk=false;
+const resetHTML=(c='')=>`<div class="sreset ${c}">${resetAsk?`<p class="t-cap">Vrátit celý výběr do výchozího stavu?</p><div class="row"><button class="btn btn-ghost btn-sm" data-rs="no">Ne</button><button class="btn btn-primary btn-sm" data-rs="yes">Ano, resetovat</button></div>`:`<button class="linkbtn" data-rs="ask">${ic('back')}Resetovat výběr</button>`}</div>`;
 function cDrawSum(){
   const p=priceOf();const s=$('#cfgSum');if(!s)return;
   s.innerHTML=`<p class="t-cap">Běžná cena</p><p class="sold">${fmtK(p.full)}</p><p class="t-cap" style="margin-top:8px">Pilotní cena</p><p class="sbig">${fmtK(p.intro)}</p>
     <p class="t-cap">Pilotní cena pro první ostrou verzi.</p>
     <div class="kvs"><div class="kv2"><span>Základ MVP</span><span>${fmtK(BASE)}</span></div>${p.adds.length?`<div class="kv2"><span>Navíc (${p.adds.length})</span><span>+ ${fmtK(p.full-BASE)}</span></div>`:''}<div class="kv2"><span>Provoz</span><span>${p.care}</span></div><div class="kv2"><span>Odhad dodání</span><span>${p.weeks} týdnů</span></div></div>
-    <p class="t-cap savest">${saveState}</p>`;
+    <p class="t-cap savest">${saveState}</p>
+    ${resetHTML()}`;
   const m=$('#mSum');if(m)m.innerHTML=`<div><span class="t-cap">Pilotní cena</span><b>${fmtK(p.intro)}</b></div><span class="t-cap">${CFG.step?'Krok '+CFG.step+' z '+(CSTEPS.length-1):'Úvod'}</span>`;
 }
+document.addEventListener('click',e=>{const b=e.target.closest('[data-rs]');if(!b)return;const a=b.dataset.rs;
+  if(a==='ask')resetAsk=true;else resetAsk=false;
+  if(a==='yes'){const keep={id:CFG.id,step:CFG.step,seen:CFG.seen};CFG=Object.assign(CFG0(),keep);cfgSave();cDrawStepper();toast('Výběr je zpět ve výchozím stavu')}
+  if(b.closest('.mob')||a==='yes')cDrawStep();cDrawSum()});
 document.addEventListener('click',e=>{const b=e.target.closest('[data-step]');if(b&&document.querySelector('.cfgpage')){e.preventDefault();cGoStep(+b.dataset.step)}});
 
 /* ================= NÁPADY ================= */

@@ -1007,6 +1007,7 @@ html{scrollbar-gutter:stable;scrollbar-color:#2f63f0 transparent;scrollbar-width
 .hub .dgroup,.hub .hub-foot{width:100%;max-width:1000px;margin-inline:auto}
 .hub .door .preview{height:160px}
 
+/* v24 */.vprice b i{font-style:normal;font-weight:300;color:#a9c8ff;font-size:.82em;margin-right:2px}
 /* v23: kompaktní úvod konfigurátoru, menší hero */
 .intro{gap:12px;padding-top:0}
 .ihead{display:flex;align-items:center;gap:14px}.ihead .tsi{flex:none}
@@ -1017,7 +1018,7 @@ html{scrollbar-gutter:stable;scrollbar-color:#2f63f0 transparent;scrollbar-width
 .vtl-cfg .t-title{font-size:15px;line-height:1.3}
 .vtl-cfg .vlist{gap:4px}.vtl-cfg .vlist li{font-size:12.5px;line-height:1.4}
 .vprice{padding:8px 0;margin:2px 0}
-.vprice b{font-family:inherit!important;font-size:22px!important;font-weight:600!important;letter-spacing:-.03em;color:#fff!important;line-height:1.15}
+.vprice b{font-family:inherit!important;font-size:22px!important;font-weight:500!important;letter-spacing:-.03em;color:#fff!important;line-height:1.15}
 .vprice .t-cap{font-size:12.5px}
 .intro .vlegend{font-size:13px}
 .stepwrap:has(.intro) .stnav{margin-top:14px}
@@ -1554,7 +1555,7 @@ function verPrices(){
   const V2=['google','pairing','crm2','auto','invoices'],V3=['gateway','sellCourse','codes'];
   const calc=on=>{const C=Object.assign(CFG0(),{videos:false,workbook:false});on.forEach(k=>C[k]=true);const sv=CFG;CFG=C;const p=priceOf();CFG=sv;return p.intro};
   const m=calc([]),v2=calc(V2),v3=calc(V2.concat(V3)),vk=calc(['videos','workbook'])-m;
-  const P=[['Hotovo','V ceně MVP',''],['Teď se naceňuje','od '+fmtK(m),'Videokurz + '+fmtK(vk)],['Možnost navíc','cca '+fmtK(v2),'+ '+fmtK(v2-m)+' k MVP'],['Možnost navíc','cca '+fmtK(v3),'+ '+fmtK(v3-m)+' k MVP, včetně verze 2']];
+  const P=[['Hotovo','V ceně MVP',''],['Teď se naceňuje','<i>od</i> '+fmtK(m),'Videokurz + '+fmtK(vk)],['Možnost navíc','<i>od</i> '+fmtK(v2),'+ '+fmtK(v2-m)+' k MVP'],['Možnost navíc','<i>od</i> '+fmtK(v3),'+ '+fmtK(v3-m)+' k MVP, včetně verze 2']];
   return `<div class="vtl vtl-cfg">${VERSIONS.map((v,i)=>`<article class="vcard ${i===0?'is-done':i===1?'is-next':''}"><div class="vtop"><span class="tile">${ic(v.icon)}</span><span class="vk">${v.k}</span></div>
     <span class="pill vst ${i<2?'blue':''}">${i===0?ic('check'):''}${P[i][0]}</span><p class="t-title">${v.t}</p>
     <div class="vprice"><b>${P[i][1]}</b>${P[i][2]?`<span class="t-cap">${P[i][2]}</span>`:''}</div>

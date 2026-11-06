@@ -1,5 +1,7 @@
 // TOP Speaker: statické soubory + jeden společný záznam konfigurátoru v KV.
-// GET  /api/konfigurace  -> vrátí uložené odpovědi (stejné pro každého, kdo zná heslo)
+// GET  /api/konfigurace        -> uložené odpovědi (stejné pro každého, kdo zná heslo)
+// GET  /api/konfigurace?vse=1  -> aktuální stav + všechny odeslané verze (stránka /odpovedi)
+// DELETE /api/konfigurace      -> smaže vše (tlačítko na /odpovedi)
 // POST /api/konfigurace  -> uloží odpovědi; po odeslání navíc uloží kopii "odeslano:<čas>"
 const KEY = 'konfigurace:sdilena';
 const json = (data, status = 200) =>
@@ -13,6 +15,23 @@ export default {
     const url = new URL(request.url);
 
     if (url.pathname === '/api/konfigurace') {
+      if (request.method === 'GET' && url.searchParams.has('vse')) {
+        const current = JSON.parse((await env.KONFIGURACE.get(KEY)) || '{}');
+        const list = await env.KONFIGURACE.list({ prefix: 'odeslano:' });
+        const sent = [];
+        for (const k of list.keys) {
+          const v = await env.KONFIGURACE.get(k.name);
+          if (v) sent.push({ at: k.name.slice('odeslano:'.length), data: JSON.parse(v) });
+        }
+        sent.sort((x, y) => (x.at < y.at ? 1 : -1));
+        return json({ current, sent });
+      }
+      if (request.method === 'DELETE') {
+        await env.KONFIGURACE.delete(KEY);
+        const list = await env.KONFIGURACE.list({ prefix: 'odeslano:' });
+        for (const k of list.keys) await env.KONFIGURACE.delete(k.name);
+        return json({ ok: true });
+      }
       if (request.method === 'GET') {
         const data = await env.KONFIGURACE.get(KEY);
         return new Response(data || '{}', {

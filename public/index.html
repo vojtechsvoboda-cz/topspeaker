@@ -923,6 +923,34 @@ html,body{height:auto!important;min-height:100%}
 .stp>span:last-child{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .stp-bar{max-width:1200px}
 @media (max-width:760px){.stp>span:last-child{display:none}.stp{padding:6px 0!important}}
+
+/* v17 */
+.vtop{flex-wrap:nowrap}
+.vst{align-self:flex-start}
+.vcard .t-title{margin-top:2px}
+.infopage{max-width:1180px}
+.infopage .snav-in{max-width:1180px}
+@media (min-width:1000px){.infopage .snav-in{justify-content:space-between;overflow:visible}}
+.strike{color:var(--faint);font-weight:400;font-size:.62em;margin-left:6px;text-decoration:line-through}
+.kv2 .strike,.xtbl .strike,.proto-p .strike{font-size:1em;margin:0 6px 0 0}
+.vlegend{display:grid;grid-template-columns:18px minmax(0,1fr);gap:8px;font-size:13px;color:var(--muted);margin:-4px 0 2px}
+.vlegend svg{width:16px;height:16px;color:var(--accent-hi);margin-top:1px}
+.vlegend b{color:#cfe3ff;font-weight:600}
+.protoline{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:14px;align-items:center;border-style:dashed}
+.proto-p{display:flex;flex-direction:column;align-items:flex-end;font-size:14px;white-space:nowrap}
+.proto-p span{color:var(--accent-hi);font-weight:600}
+@media (max-width:520px){.protoline{grid-template-columns:44px minmax(0,1fr)}.proto-p{grid-column:2;align-items:flex-start;flex-direction:row;gap:6px}}
+.modal{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));animation:in .25s ease both}
+.modal-bg{position:absolute;inset:0;background:rgba(2,4,12,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.modal-card{position:relative;width:min(760px,100%);max-height:calc(100dvh - 32px);overflow:auto;border-radius:20px;border:1px solid rgba(120,175,255,.3);background:#070d22;box-shadow:0 30px 80px -20px rgba(0,0,0,.9)}
+.modal-h{position:sticky;top:0;z-index:1;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 18px;background:#070d22;border-bottom:1px solid var(--line)}
+.modal-b{padding:18px}
+body.noscroll{overflow:hidden}
+.ans-card{display:flex;flex-direction:column;gap:16px}
+.ans-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media (max-width:680px){.ans-grid{grid-template-columns:1fr}}
+.ans-h{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-hi);margin-bottom:6px}
+.ans-t{white-space:pre-wrap;font-size:14.5px;color:#d9e8ff}
 </style>
 
 </head>
@@ -1256,7 +1284,7 @@ filter:'<path d="M4 5h16l-6 7v6l-4 2v-8z"/>',
 chart:'<path d="M5 20V11M11 20V5M17 20v-6M2 20h20"/>',
 thumb:'<path d="M7 11v9H4v-9zM7 11l4-7a2 2 0 0 1 2 2v4h5.5a2 2 0 0 1 2 2.3l-1.2 6A2 2 0 0 1 17.3 20H7"/>',
 cloud:'<path d="M7 18a4.5 4.5 0 0 1-.6-9 6 6 0 0 1 11.4 1.5A3.8 3.8 0 0 1 17.5 18z"/>',
-rocket:'<path d="M12 15 9 12c1-4 4-8 10-9-1 6-5 9-9 10z"/><path d="m9 12-4 1-2 3 4 1M12 15l-1 4 3 2 1-4"/>',
+rocket:'<path d="M5 15c-1.6 1.4-2 5-2 5s3.6-.4 5-2"/><path d="M9 14.5 6.5 12C8 6.5 12.5 3.5 20.5 3.5c0 8-3 12.5-8.5 14z"/><circle cx="15" cy="9" r="1.6"/><path d="M7 12.2H4l2-3.2h3.8M12 17v3l3.2-2v-3.8"/>',
 wallet:'<rect x="3" y="6" width="18" height="14" rx="2.5"/><path d="M3 10h18M16 15h2"/><path d="M6 6l9-3 1 3"/>',
 globe2:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 3.5 5.5 3.5 9s-1 6.5-3.5 9c-2.5-2.5-3.5-5.5-3.5-9s1-6.5 3.5-9z"/>',
 mic2:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>',
@@ -1296,12 +1324,12 @@ function sectionNav(host,items){
 /* ================= JAK TO BUDE FUNGOVAT ================= */
 const VERSIONS=[
  {k:'Beta',st:'Hotovo',icon:'compass',t:'Klikací prototyp',d:'Celý vzhled a průchod appkou. Data se ukládají jen v prohlížeči.',f:['Design všech obrazovek','Diagnostika a persony','Ukázka videokurzu a workshopů','Pracovní list a náhled přehledu']},
- {k:'MVP',st:'Další krok',icon:'rocket',t:'Ostrá appka',d:'Skuteční lidé, účty, přihlášky a platby. Ty vidíš všechny v přehledu.',f:['Přihlášení e-mailem a kódem','Workshopy a přihlášky','QR platby s potvrzením v přehledu','Přehled lidí s filtry a exportem','Videokurz s tvými videi (volitelně)']},
- {k:'Verze 2',st:'Automatizace',icon:'bolt',t:'Appka dělá papírování za tebe',d:'Až MVP poběží a uvidíme, co lidé používají nejvíc.',f:['Automatické párování plateb','Faktury po zaplacení','Připomínky a e-maily po workshopu','Štítky, poznámky, e-maily skupinám']},
+ {k:'MVP',st:'Další krok',icon:'rocket',t:'Ostrá appka',d:'Skuteční účastníci, účty, přihlášky a platby. Všechno přehledně na jednom místě.',f:['Přihlášení e-mailem a kódem','Workshopy a přihlášky','QR platby s potvrzením v přehledu','Přehled lidí s filtry a exportem','Videokurz s vlastními videi (volitelně)']},
+ {k:'Verze 2',st:'Automatizace',icon:'bolt',t:'Automatizace administrativy',d:'Až MVP poběží a uvidíme, co lidé používají nejvíc.',f:['Automatické párování plateb','Faktury po zaplacení','Připomínky a e-maily po workshopu','Štítky, poznámky, e-maily skupinám']},
  {k:'Verze 3',st:'Růst',icon:'trend',t:'Online prodej a nové produkty',d:'Podle toho, jak porostou workshopy.',f:['Platební brána: karta, Apple Pay, Google Pay','Prodej videokurzu i bez workshopu','Slevové kódy a dárkové poukazy','Další lektoři']}
 ];
 function vInfo(){
-  const sec=[['verze','Verze'],['prihlaseni','Přihlášení'],['qr','QR platby'],['brana','Platební brána'],['provoz','Provoz'],['stavba','Jak je postavená'],['data','Data a GDPR'],['domena','Doména'],['podminky','Platba a záruka']];
+  const sec=[['verze','Verze'],['prihlaseni','Přihlášení'],['qr','QR platby'],['brana','Platební brána'],['provoz','Provoz'],['stavba','Technologie'],['data','Data a GDPR'],['domena','Doména'],['podminky','Podmínky']];
   const yes=ic('check'),no=ic('x');
   const QRV=[
    {t:'Jen číslo účtu',d:'Člověk dopíše částku sám. Snadno se splete.',c:[1,0,0,0]},
@@ -1309,27 +1337,27 @@ function vInfo(){
    {t:'Účet, částka a zpráva',d:'Ve zprávě je jméno a workshop. Párování podle textu.',c:[1,1,1,0]},
    {t:'Účet, částka, zpráva a variabilní symbol',d:'Každá přihláška má vlastní variabilní symbol. Platbu jde spárovat jednoznačně.',c:[1,1,1,1],rec:true}];
   const QRF=['Číslo účtu','Částka','Zpráva pro příjemce','Variabilní symbol'];
-  root.innerHTML=`<div class="page xpage view">
+  root.innerHTML=`<div class="page xpage infopage view">
    ${pageTop('Jak to bude fungovat')}
-   <header class="xhero"><span class="tag-k">Informace</span><h1 class="t-display">Jak bude TOP Speaker fungovat</h1><p class="t-cap xlead">Od bety k ostré appce: jak se lidé přihlásí, jak zaplatí, co zahrnuje provoz a na čem aplikace stojí. Cenu si pak naklikáš v konfigurátoru.</p></header>
+   <header class="xhero"><span class="tag-k">Informace</span><h1 class="t-display">Jak bude TOP Speaker fungovat</h1><p class="t-cap xlead">Od bety k ostré appce: jak se lidé přihlásí, jak zaplatí, co zahrnuje provoz a na čem aplikace stojí. Cena podle zvoleného rozsahu je v konfigurátoru.</p></header>
    <div id="snavHost" class="snav-host"></div>
 
    <section class="xsec" id="verze"><h2 class="xh">Verze</h2>
-     <div class="vtl">${VERSIONS.map((v,i)=>`<article class="vcard ${i===0?'is-done':i===1?'is-next':''}"><div class="vtop"><span class="tile">${ic(v.icon)}</span><span class="vk">${v.k}</span><span class="pill ${i===0?'blue':''}">${i===0?ic('check'):''}${v.st}</span></div>
+     <div class="vtl">${VERSIONS.map((v,i)=>`<article class="vcard ${i===0?'is-done':i===1?'is-next':''}"><div class="vtop"><span class="tile">${ic(v.icon)}</span><span class="vk">${v.k}</span></div><span class="pill vst ${i===0?'blue':''}">${i===0?ic('check'):''}${v.st}</span>
        <p class="t-title">${v.t}</p><p class="t-cap">${v.d}</p><ul class="vlist">${v.f.map(x=>`<li>${ic(i===0?'check':'chev')}<span>${x}</span></li>`).join('')}</ul></article>`).join('')}</div>
    </section>
 
    <section class="xsec" id="prihlaseni"><h2 class="xh">Přihlášení a účty</h2>
      <div class="steps3">${[['mail','Zadá e-mail','Na úvodní obrazovce, bez vymýšlení hesla.'],['key','Přijde mu kód','Šestimístný kód platí pár minut. Zadá ho a je přihlášený.'],['user','Vyplní jméno','Jen při první registraci, spolu se souhlasem se zpracováním údajů.']].map((s,i)=>`<div class="card s3"><span class="s3n">${i+1}</span><span class="tile">${ic(s[0])}</span><p class="t-strong">${s[1]}</p><p class="t-cap">${s[2]}</p></div>`).join('')}</div>
-     <p class="t-cap">Ty pak v přehledu vidíš člověka se jménem a vším, co v appce udělal. Přihlášení přes Google a klasické heslo jsou v konfigurátoru jako možnost.</p>
+     <p class="t-cap">V přehledu je pak každý účastník se jménem a vším, co v appce udělal. Přihlášení přes Google a klasické heslo jsou v konfigurátoru jako volitelné možnosti.</p>
    </section>
 
    <section class="xsec" id="qr"><h2 class="xh">QR platby</h2>
      <p class="t-cap xlead">QR platbu přečte každá česká bankovní appka a neplatí se za ni žádné poplatky. Liší se tím, co všechno je v kódu předvyplněné.</p>
-     <div class="qrv">${QRV.map((v,i)=>`<article class="card qcard ${v.rec?'rec':''}">${v.rec?'<span class="pill blue">Doporučuju pro MVP</span>':''}<div class="qtop">${miniQR(i+1,64)}<div><p class="t-strong">${v.t}</p><p class="t-cap">${v.d}</p></div></div>
+     <div class="qrv">${QRV.map((v,i)=>`<article class="card qcard ${v.rec?'rec':''}">${v.rec?'<span class="pill blue">Doporučeno pro MVP</span>':''}<div class="qtop">${miniQR(i+1,64)}<div><p class="t-strong">${v.t}</p><p class="t-cap">${v.d}</p></div></div>
        <ul class="qf">${QRF.map((f,j)=>`<li class="${v.c[j]?'on':''}">${v.c[j]?yes:no}<span>${f}</span></li>`).join('')}</ul></article>`).join('')}</div>
-     <div class="card pair"><div class="pair-col"><span class="tile">${ic('user')}</span><div><p class="t-strong">MVP: potvrzuješ ty</p><p class="t-cap">V přehledu vidíš přihlášky s variabilními symboly. Když platba dorazí, klikneš „Zaplaceno“ a člověku se workshop potvrdí e-mailem.</p></div></div>
-       <div class="pair-col"><span class="tile">${ic('refresh')}</span><div><p class="t-strong">Verze 2: appka páruje sama</p><p class="t-cap">Appka si načítá pohyby na účtu a podle variabilního symbolu platbu sama potvrdí. Napojení naceníme podle tvé banky. Fio dává přístup k pohybům zdarma, u některých bank může být přístup placený.</p></div></div></div>
+     <div class="card pair"><div class="pair-col"><span class="tile">${ic('user')}</span><div><p class="t-strong">MVP: potvrzení v přehledu</p><p class="t-cap">Přihlášky jsou v přehledu s variabilními symboly. Po přijetí platby stačí kliknout na „Zaplaceno“ a účastníkovi přijde potvrzení e-mailem.</p></div></div>
+       <div class="pair-col"><span class="tile">${ic('refresh')}</span><div><p class="t-strong">Verze 2: appka páruje sama</p><p class="t-cap">Appka si načítá pohyby na účtu a podle variabilního symbolu platbu sama potvrdí. Napojení se upřesní podle banky. Fio nabízí přístup k pohybům zdarma, u některých bank může být přístup placený.</p></div></div></div>
    </section>
 
    <section class="xsec" id="brana"><h2 class="xh">Platební brána <span class="pill">Verze 3</span></h2>
@@ -1343,7 +1371,7 @@ function vInfo(){
    </section>
 
    <section class="xsec" id="provoz"><h2 class="xh">Provoz a péče</h2>
-     <div class="card care"><div class="care-top"><div><p class="t-cap">Platí se od spuštění, navíc k jednorázové ceně za vývoj</p><p class="care-price" id="careP">8 000 Kč ročně</p><p class="t-cap" id="careN">Při platbě na rok dopředu ušetříš 1 600 Kč, tedy dva měsíce.</p></div>
+     <div class="card care"><div class="care-top"><div><p class="t-cap">Platí se od spuštění, navíc k jednorázové ceně za vývoj</p><p class="care-price" id="careP">8 000 Kč ročně</p><p class="t-cap" id="careN">Při platbě na rok dopředu je úspora 1 600 Kč, tedy dva měsíce.</p></div>
        <div class="sw" role="group" aria-label="Způsob placení provozu" data-sw="care"><span class="sw-th"></span><button data-v="year" aria-pressed="true">Ročně</button><button data-v="month" aria-pressed="false">Měsíčně</button></div></div>
        <div class="incl">${[['server','Hosting appky a databáze','Rychlé načítání po celé ČR, šifrované spojení.'],['cloud','Zálohy','Databázi jde obnovit do stavu až 30 dní zpět.'],['mail','E-maily do 3 000 měsíčně','Kódy pro přihlášení, potvrzení a připomínky.'],['play','Videa','Do 1 000 minut uložených a 8 000 zhlédnutých minut měsíčně.'],['shield','Aktualizace a dohled','Bezpečnostní aktualizace a hlídání chyb.'],['pen','Drobné úpravy','Do 1 hodiny práce měsíčně, třeba nový termín nebo text.']].map(x=>`<div class="inc">${ic(x[0])}<div><p class="t-strong">${x[1]}</p><p class="t-cap">${x[2]}</p></div></div>`).join('')}</div>
        <p class="t-cap">Limity mají velkou rezervu. Celý videokurz má kolem 48 minut, takže 8 000 zhlédnutých minut znamená zhruba 160 lidí, kteří ho za měsíc projdou celý. Kdyby appka limity přerostla, domluvíme se předem.</p>
@@ -1357,29 +1385,29 @@ function vInfo(){
    </section>
 
    <section class="xsec" id="stavba"><h2 class="xh">Jak je aplikace postavená</h2>
-     <div class="grid2x">${[['cloud','Moderní cloudová infrastruktura','Appka běží na síti datových center, je rychlá po celé ČR a zvládne i nával přihlášek.'],['flask','Testovací prostředí','Každá novinka se nejdřív nasadí na testovací adresu. Do ostré appky jde, až ji schválíš.'],['check','Automatické testy','Přihlášení, přihláška na workshop a potvrzení platby se před každým nasazením samy otestují.'],['lock','Zabezpečení','Šifrované spojení, přihlášení kódem bez ukládání hesel a přístup do přehledu jen pro tebe.']].map(x=>`<div class="card glow feat"><span class="tile">${ic(x[0])}</span><div><p class="t-strong">${x[1]}</p><p class="t-cap">${x[2]}</p></div></div>`).join('')}</div>
+     <div class="grid2x">${[['cloud','Moderní cloudová infrastruktura','Appka běží na síti datových center, je rychlá po celé ČR a zvládne i nával přihlášek.'],['flask','Testovací prostředí','Každá novinka se nejdřív nasadí na testovací adresu a do ostré appky jde až po schválení.'],['check','Automatické testy','Přihlášení, přihláška na workshop a potvrzení platby se před každým nasazením samy otestují.'],['lock','Zabezpečení','Šifrované spojení, přihlášení kódem bez ukládání hesel a přístup do přehledu jen pro lektora.']].map(x=>`<div class="card glow feat"><span class="tile">${ic(x[0])}</span><div><p class="t-strong">${x[1]}</p><p class="t-cap">${x[2]}</p></div></div>`).join('')}</div>
    </section>
 
    <section class="xsec" id="data"><h2 class="xh">Data a GDPR</h2>
-     <div class="card"><div class="incl one">${[['user','Data patří tobě','Jsi správce osobních údajů účastníků. Já jsem zpracovatel, podepíšeme zpracovatelskou smlouvu.'],['check','Souhlas při registraci','Účastník při první registraci potvrdí podmínky a zásady ochrany osobních údajů.'],['download','Export kdykoliv','Z přehledu si stáhneš všechny lidi a jejich data do tabulky.'],['x','Smazání na žádost','Účet a data člověka jde na jeho žádost smazat.']].map(x=>`<div class="inc">${ic(x[0])}<div><p class="t-strong">${x[1]}</p><p class="t-cap">${x[2]}</p></div></div>`).join('')}</div>
-     <p class="t-cap" style="margin-top:12px">Texty podmínek a zásad ochrany osobních údajů dodáš ty, nebo je připravíme podle šablony a necháš je zkontrolovat.</p></div>
+     <div class="card"><div class="incl one">${[['user','Data patří provozovateli','Provozovatel je správce osobních údajů účastníků, dodavatel aplikace je zpracovatel. Vztah upraví zpracovatelská smlouva.'],['check','Souhlas při registraci','Účastník při první registraci potvrdí podmínky a zásady ochrany osobních údajů.'],['download','Export kdykoliv','Z přehledu jde kdykoliv stáhnout všechny účastníky a jejich data do tabulky.'],['x','Smazání na žádost','Účet a data člověka jde na jeho žádost smazat.']].map(x=>`<div class="inc">${ic(x[0])}<div><p class="t-strong">${x[1]}</p><p class="t-cap">${x[2]}</p></div></div>`).join('')}</div>
+     <p class="t-cap" style="margin-top:12px">Texty podmínek a zásad ochrany osobních údajů dodá provozovatel, nebo se připraví podle šablony ke kontrole.</p></div>
    </section>
 
    <section class="xsec" id="domena"><h2 class="xh">Doména</h2>
      <div class="card dom"><span class="dom-name">topspeaker.cz</span><div class="row" style="gap:8px"><span class="pill blue">${ic('check')}Volná k 6. 11. 2026</span><span class="pill">kolem 200 Kč ročně</span></div>
-       <p class="t-cap">Doporučuju ji zaregistrovat co nejdřív, než ji vezme někdo jiný. V konfigurátoru vybereš, jestli ji koupíš sám, nebo ji zařídím já.</p></div>
+       <p class="t-cap">Doporučená registrace co nejdříve. V konfigurátoru jde zvolit, kdo doménu zaregistruje.</p></div>
    </section>
 
    <section class="xsec" id="podminky"><h2 class="xh">Platba a záruka</h2>
-     <div class="grid2x">${[['wallet','Ve dvou částech','Polovina při startu, polovina po spuštění. Nebo rozloženě do měsíčních splátek bez navýšení.'],['shield','Záruka 30 dní','Chyby proti dohodnutému rozsahu nahlášené do 30 dnů od spuštění opravím zdarma.'],['receipt','Bez DPH navíc','Nejsem plátce DPH, ceny jsou konečné.'],['pen','Změny předem','Nové funkce a změny rozsahu vždy předem naceníme a schválíš je.']].map(x=>`<div class="card glow feat"><span class="tile">${ic(x[0])}</span><div><p class="t-strong">${x[1]}</p><p class="t-cap">${x[2]}</p></div></div>`).join('')}</div>
-     <button class="card cta glow" data-go="konfigurator"><span class="tile">${ic('stack3')}</span><div><p class="t-title">Pokračovat do konfigurátoru</p><p class="t-cap">Vyber rozsah MVP a uvidíš cenu.</p></div>${ic('arrow','class="chev"')}</button>
+     <div class="grid2x">${[['wallet','Ve dvou částech','Polovina při startu, polovina po spuštění. Nebo rozloženě do měsíčních splátek bez navýšení.'],['shield','Opravy po spuštění','Případné chyby proti dohodnutému rozsahu nahlášené do 30 dnů od spuštění se opraví zdarma.'],['receipt','Bez DPH navíc','Nejsem plátce DPH, ceny jsou konečné.'],['pen','Změny předem','Nové funkce a změny rozsahu se vždy předem nacení a schválí.']].map(x=>`<div class="card glow feat"><span class="tile">${ic(x[0])}</span><div><p class="t-strong">${x[1]}</p><p class="t-cap">${x[2]}</p></div></div>`).join('')}</div>
+     <button class="card cta glow" data-go="konfigurator"><span class="tile">${ic('stack3')}</span><div><p class="t-title">Pokračovat do konfigurátoru</p><p class="t-cap">Rozsah MVP a cena podle výběru.</p></div>${ic('arrow','class="chev"')}</button>
    </section>
    ${credit()}
   </div>`;
   sectionNav($('#snavHost'),sec);
   bindSw(root,'care',CFG.care,v=>{CFG.care=v;cfgSave();careText()});careText();
 }
-function careText(){const y=CFG.care==='year';const a=$('#careP'),b=$('#careN');if(!a)return;a.textContent=y?'8 000 Kč ročně':'800 Kč měsíčně';b.textContent=y?'Při platbě na rok dopředu ušetříš 1 600 Kč, tedy dva měsíce.':'Ročně 9 600 Kč. Při platbě na rok dopředu by to bylo 8 000 Kč.'}
+function careText(){const y=CFG.care==='year';const a=$('#careP'),b=$('#careN');if(!a)return;a.innerHTML=y?'8 000 Kč ročně <s class="strike">9 600 Kč</s>':'800 Kč měsíčně';b.textContent=y?'Při platbě na rok dopředu je úspora 1 600 Kč, tedy dva měsíce.':'Ročně 9 600 Kč. Při platbě na rok dopředu by to bylo 8 000 Kč.'}
 
 /* sliding segmented switch */
 function bindSw(scope,name,value,onChange){
@@ -1418,22 +1446,22 @@ function setSaveUI(t){saveState=t;document.querySelectorAll('.savest').forEach(e
 
 const BASE=50000;
 const ADDS={pass:2000,google:2000,pairing:8000,gateway:12000,crm2:8000,videos:8000,workbook:4000,auto:4000,invoices:6000,sellCourse:8000,codes:4000};
-const ADDNAMES={pass:'Přihlášení e-mailem a heslem',google:'Přihlášení přes Google',pairing:'Automatické párování plateb',gateway:'Platební brána',crm2:'Rozšířený přehled lidí',videos:'Videokurz s tvými videi',workbook:'Přepis workbooku do kapitol',auto:'Automatické e-maily',invoices:'Automatické faktury',sellCourse:'Prodej videokurzu samostatně',codes:'Slevové kódy a poukazy'};
+const ADDNAMES={pass:'Přihlášení e-mailem a heslem',google:'Přihlášení přes Google',pairing:'Automatické párování plateb',gateway:'Platební brána',crm2:'Rozšířený přehled lidí',videos:'Videokurz s vlastními videi',workbook:'Přepis workbooku do kapitol',auto:'Automatické e-maily',invoices:'Automatické faktury',sellCourse:'Prodej videokurzu samostatně',codes:'Slevové kódy a poukazy'};
 function selectedAdds(){const a=[];if(CFG.login==='pass')a.push('pass');['google','pairing','gateway','crm2','videos','workbook','auto','invoices','sellCourse','codes'].forEach(k=>{if(CFG[k])a.push(k)});return a}
 function priceOf(){const adds=selectedAdds();const full=BASE+adds.reduce((s,k)=>s+ADDS[k],0);const intro=Math.floor(full*0.8/2000)*2000;
   const weeks=Math.max(4,Math.round(full/62000*6/2)*2);
   let sched;if(CFG.pay==='two'){const h=Math.round(intro/2/100)*100;sched=[['Při startu',h],['Po spuštění',intro-h]]}
   else{const st=Math.round(intro/3/2000)*2000;const m=Math.round((intro-st)/8/100)*100;sched=[['Při startu',st],['Pak 8× měsíčně',m]]}
-  return{full,intro,disc:full-intro,adds,weeks,sched,care:CFG.care==='year'?'8 000 Kč ročně':'800 Kč měsíčně'}}
+  return{full,intro,disc:full-intro,adds,weeks,sched,care:CFG.care==='year'?'<s class="strike">9 600</s> 8 000 Kč ročně':'800 Kč měsíčně'}}
 
 const CSTEPS=[
  {id:'uvod',t:'Úvod',i:'spark'},{id:'zaklad',t:'Základ MVP',i:'stack3'},{id:'prihlaseni',t:'Přihlášení',i:'key'},{id:'platby',t:'Platby',i:'qr'},
  {id:'prehled',t:'Přehled lidí',i:'group'},{id:'videokurz',t:'Videokurz',i:'play'},{id:'navic',t:'Navíc',i:'plus'},{id:'provoz',t:'Provoz',i:'server'},
- {id:'o-tobe',t:'O tobě',i:'pen'},{id:'shrnuti',t:'Shrnutí',i:'check'}];
+ {id:'o-tobe',t:'Podklady',i:'pen'},{id:'shrnuti',t:'Shrnutí',i:'check'}];
 const BASEITEMS=[
- ['globe2','Ostrá appka na tvé doméně','Převod bety, databáze, testovací prostředí a zálohy.','beta'],
+ ['globe2','Ostrá appka na vlastní doméně','Převod bety, databáze, testovací prostředí a zálohy.','beta'],
  ['key','Účty a přihlášení kódem','Přihlášení e-mailem a jednorázovým kódem, profil se jménem.','new'],
- ['hexa','Diagnostika a persona','Hexagon a persona se uloží do profilu a uvidíš je v přehledu.','beta'],
+ ['hexa','Diagnostika a persona','Hexagon a persona se uloží do profilu a jsou vidět v přehledu.','beta'],
  ['cal','Workshopy a přihlášky','Termíny, kapacita, odemykání a potvrzovací e-maily.','beta'],
  ['qr','QR platby','QR kód s částkou a variabilním symbolem, potvrzení v přehledu.','new'],
  ['group','Přehled lidí','Tabulka s filtry, detail člověka, správa workshopů a export.','beta'],
@@ -1445,65 +1473,68 @@ const INVT=['Fakturoid','iDoklad','Pohoda','Money S3','Řeší účetní'];
 function chRow({id,kind,on,icon,t,d,price,tag,incl}){return `<button class="ch glow ${on?'on':''}" role="${kind==='radio'?'radio':'checkbox'}" aria-checked="${on}" data-ch="${id}">
   <span class="tile">${ic(icon)}</span><span class="ch-tx"><span class="ch-t">${t}${tag?`<span class="vtag">${tag}</span>`:''}</span><span class="t-cap">${d}</span></span>
   <span class="ch-p">${incl?'<span class="incl-t">V základu</span>':price?'+ '+fmtK(price):''}</span><span class="ind ${kind==='radio'?'radio':''}">${ic('check')}</span></button>`}
-function noteBox(key){const v=CFG.notes[key]||'';return `<div class="nbox"><button class="addnote" data-nt="${key}">${ic('note')}${v?'Poznámka':'Přidat poznámku'}</button><textarea data-nta="${key}" placeholder="Chceš k tomu něco dodat?" ${v?'':'hidden'}>${esc(v)}</textarea></div>`}
+function verLegend(){return `<p class="vlegend">${ic('bulb')}<span>Štítek <b>Verze 2</b> nebo <b>Verze 3</b> je doporučení, kdy funkci přidat. Zapnout ji jde i hned v MVP.</span></p>`}
+function noteBox(key){const v=CFG.notes[key]||'';return `<div class="nbox"><button class="addnote" data-nt="${key}">${ic('note')}${v?'Poznámka':'Přidat poznámku'}</button><textarea data-nta="${key}" placeholder="Poznámka k tomuto kroku" ${v?'':'hidden'}>${esc(v)}</textarea></div>`}
 function lbl(t,sub){return `<div class="glbl"><span>${t}</span>${sub?`<span class="t-cap">${sub}</span>`:''}</div>`}
 
 function stepBody(id){
   if(id==='uvod')return `<div class="intro"><div class="intro-ic">${tsIcon(72)}</div><h2 class="t-display">Konfigurátor aplikace</h2>
-    <p class="t-cap xlead">Za pár minut projdeš, co bude umět první ostrá verze, vybereš, co chceš navíc, a rovnou uvidíš cenu. Na konci mi to odešleš. Všechno se průběžně ukládá, takže se k tomu můžeš kdykoliv vrátit, i z jiného zařízení.</p>
+    <p class="t-cap xlead">Přehled toho, co bude umět první ostrá verze, výběr doplňků a cena podle zvoleného rozsahu. Na konci se výběr odešle. Vše se průběžně ukládá, takže se k němu jde kdykoliv vrátit, i z jiného zařízení.</p>
     <div class="intro-grid">${CSTEPS.slice(1,-1).map(s=>`<span class="ig">${ic(s.i)}${s.t}</span>`).join('')}</div>
-    <p class="t-cap">Podrobnosti k platbám, provozu a datům najdeš v sekci <button class="linkb" data-go="jak-to-funguje">Jak to bude fungovat</button>.</p></div>`;
-  if(id==='zaklad')return `<div class="basehead card"><div><p class="t-cap">Běžná cena základu</p><p class="bprice">${fmtK(BASE)}</p></div><p class="t-cap">Všechno, co appka potřebuje, aby se do ní lidé přihlásili, zaplatili a ty je viděl v přehledu.</p></div>
+    <p class="t-cap">Podrobnosti k platbám, provozu a datům jsou u jednotlivých kroků a v sekci Jak to bude fungovat na rozcestníku.</p></div>`;
+  if(id==='zaklad')return `<div class="basehead card"><div><p class="t-cap">Běžná cena základu</p><p class="bprice">${fmtK(BASE)}</p></div><p class="t-cap">Vše potřebné k tomu, aby se účastníci přihlásili, zaplatili a byli vidět v přehledu.</p></div>
+    <div class="card protoline"><span class="tile">${ic('check')}</span><div><p class="t-strong">Návrh designu a klikací prototyp</p><p class="t-cap">Hotová beta: vizuální styl, logo, obrazovky appky, pracovní list a přehled pro lektora.</p></div><div class="proto-p"><s class="strike">${fmtK(DESIGN)}</s><span>v ceně</span></div></div>
     <div class="bgrid">${BASEITEMS.map(b=>`<div class="bitem card glow"><span class="tile">${ic(b[0])}</span><p class="t-strong">${b[1]}</p><p class="t-cap">${b[2]}</p><span class="pill ${b[3]==='beta'?'blue':''}">${b[3]==='beta'?ic('check')+'Navrženo v betě':'Nové v MVP'}</span></div>`).join('')}</div>${noteBox('zaklad')}`;
-  if(id==='prihlaseni')return `${lbl('Způsob přihlášení','Povinné, vyber jedno')}<div class="chs">
-    ${chRow({id:'login:code',kind:'radio',on:CFG.login==='code',icon:'mail',t:'E-mail a jednorázový kód',d:'Bez hesel. Zadá e-mail, přijde mu kód.',incl:true,tag:'Doporučuju'})}
+  if(id==='prihlaseni')return `${lbl('Způsob přihlášení','Povinné, jedna možnost')}<div class="chs">
+    ${chRow({id:'login:code',kind:'radio',on:CFG.login==='code',icon:'mail',t:'E-mail a jednorázový kód',d:'Bez hesel. Zadá e-mail, přijde mu kód.',incl:true,tag:'Doporučeno'})}
     ${chRow({id:'login:pass',kind:'radio',on:CFG.login==='pass',icon:'key',t:'E-mail a heslo',d:'Klasická registrace s obnovou zapomenutého hesla.',price:ADDS.pass})}</div>
-    ${lbl('Navíc','Volitelné')}<div class="chs">${chRow({id:'google',kind:'check',on:CFG.google,icon:'globe2',t:'Přihlášení přes Google',d:'Jedním klikem, jako doplněk k e-mailu.',price:ADDS.google,tag:'V2'})}</div>${noteBox('prihlaseni')}`;
-  if(id==='platby')return `${lbl('QR platba','V základu')}<div class="card qrdemo">${miniQR(4,84)}<div><p class="t-strong">QR kód s částkou a variabilním symbolem</p><p class="t-cap">Každá přihláška dostane vlastní variabilní symbol. Platbu potvrdíš v přehledu jedním klikem.</p><button class="linkb" data-go="jak-to-funguje">Varianty QR plateb</button></div></div>
-    ${lbl('Navíc','Volitelné')}<div class="chs">
-    ${chRow({id:'pairing',kind:'check',on:CFG.pairing,icon:'refresh',t:'Automatické párování plateb',d:'Appka sama potvrdí platbu podle variabilního symbolu. Napojení upřesníme podle tvé banky.',price:ADDS.pairing,tag:'V2'})}
-    ${chRow({id:'gateway',kind:'check',on:CFG.gateway,icon:'card',t:'Platební brána',d:'Karta, Apple Pay a Google Pay s okamžitým potvrzením. Brána bere kolem 1–1,5 % z platby.',price:ADDS.gateway,tag:'V3'})}</div>${noteBox('platby')}`;
+    ${lbl('Navíc','Volitelné')}${verLegend()}<div class="chs">${chRow({id:'google',kind:'check',on:CFG.google,icon:'globe2',t:'Přihlášení přes Google',d:'Jedním klikem, jako doplněk k e-mailu.',price:ADDS.google,tag:'Verze 2'})}</div>${noteBox('prihlaseni')}`;
+  if(id==='platby')return `${lbl('QR platba','V základu')}<div class="card qrdemo">${miniQR(4,84)}<div><p class="t-strong">QR kód s částkou a variabilním symbolem</p><p class="t-cap">Každá přihláška dostane vlastní variabilní symbol. Platbu potvrdíš v přehledu jedním klikem.</p><button class="linkb" data-modal="qr">Varianty QR plateb</button></div></div>
+    ${lbl('Navíc','Volitelné')}${verLegend()}<div class="chs">
+    ${chRow({id:'pairing',kind:'check',on:CFG.pairing,icon:'refresh',t:'Automatické párování plateb',d:'Appka sama potvrdí platbu podle variabilního symbolu. Napojení se upřesní podle banky.',price:ADDS.pairing,tag:'Verze 2'})}
+    ${chRow({id:'gateway',kind:'check',on:CFG.gateway,icon:'card',t:'Platební brána',d:'Karta, Apple Pay a Google Pay s okamžitým potvrzením. Brána bere kolem 1–1,5 % z platby.',price:ADDS.gateway,tag:'Verze 3'})}</div>${noteBox('platby')}`;
   if(id==='prehled')return `${lbl('Přehled lidí','V základu')}<div class="card crmdemo">${[['filter','Filtry','level, persona, workshop, zaplaceno'],['user','Detail člověka','diagnostika, platby, odpovědi'],['download','Export','do tabulky kdykoliv']].map(x=>`<div class="inc">${ic(x[0])}<div><p class="t-strong">${x[1]}</p><p class="t-cap">${x[2]}</p></div></div>`).join('')}</div>
-    ${lbl('Navíc','Volitelné')}<div class="chs">${chRow({id:'crm2',kind:'check',on:CFG.crm2,icon:'tagx',t:'Rozšířený přehled',d:'Poznámky, štítky, historie a hromadný e-mail vybrané skupině, třeba všem po Základu.',price:ADDS.crm2,tag:'V2'})}</div>${noteBox('prehled')}`;
+    ${lbl('Navíc','Volitelné')}${verLegend()}<div class="chs">${chRow({id:'crm2',kind:'check',on:CFG.crm2,icon:'tagx',t:'Rozšířený přehled',d:'Poznámky, štítky, historie a hromadný e-mail vybrané skupině, například absolventům workshopu Základ.',price:ADDS.crm2,tag:'Verze 2'})}</div>${noteBox('prehled')}`;
   if(id==='videokurz')return `${lbl('Videokurz','Volitelné, můžeš přidat i později')}<div class="chs">
-    ${chRow({id:'videos',kind:'check',on:CFG.videos,icon:'play',t:'Videokurz s tvými videi',d:'Přehrávání jen pro přihlášené, ukládání průběhu a odemykání workshopů.',price:ADDS.videos,tag:'MVP'})}
+    ${chRow({id:'videos',kind:'check',on:CFG.videos,icon:'play',t:'Videokurz s vlastními videi',d:'Přehrávání jen pro přihlášené, ukládání průběhu a odemykání workshopů.',price:ADDS.videos,tag:'MVP'})}
     ${chRow({id:'workbook',kind:'check',on:CFG.workbook,icon:'book',t:'Přepis workbooku do kapitol',d:'Myšlenky, tabulky a cvičení z workbooku převedu do appky.',price:ADDS.workbook,tag:'MVP'})}</div>${noteBox('videokurz')}`;
-  if(id==='navic')return `${lbl('Funkce z dalších verzí','Volitelné, jdou přidat i hned')}<div class="chs">
-    ${chRow({id:'auto',kind:'check',on:CFG.auto,icon:'mail',t:'Automatické e-maily',d:'Připomínka den před workshopem, výzva k hodnocení po něm.',price:ADDS.auto,tag:'V2'})}
-    ${chRow({id:'invoices',kind:'check',on:CFG.invoices,icon:'receipt',t:'Automatické faktury',d:'Po zaplacení se sama vystaví a odešle faktura.',price:ADDS.invoices,tag:'V2'})}
-    ${chRow({id:'sellCourse',kind:'check',on:CFG.sellCourse,icon:'wallet',t:'Prodej videokurzu samostatně',d:'Placený přístup ke kurzu i pro lidi bez workshopu.',price:ADDS.sellCourse,tag:'V3'})}
-    ${chRow({id:'codes',kind:'check',on:CFG.codes,icon:'tagx',t:'Slevové kódy a poukazy',d:'Kódy na workshopy a dárkové poukazy.',price:ADDS.codes,tag:'V3'})}</div>${noteBox('navic')}`;
+  if(id==='navic')return `${lbl('Funkce z dalších verzí','Volitelné')}${verLegend()}<div class="chs">
+    ${chRow({id:'auto',kind:'check',on:CFG.auto,icon:'mail',t:'Automatické e-maily',d:'Připomínka den před workshopem, výzva k hodnocení po něm.',price:ADDS.auto,tag:'Verze 2'})}
+    ${chRow({id:'invoices',kind:'check',on:CFG.invoices,icon:'receipt',t:'Automatické faktury',d:'Po zaplacení se sama vystaví a odešle faktura.',price:ADDS.invoices,tag:'Verze 2'})}
+    ${chRow({id:'sellCourse',kind:'check',on:CFG.sellCourse,icon:'wallet',t:'Prodej videokurzu samostatně',d:'Placený přístup ke kurzu i pro lidi bez workshopu.',price:ADDS.sellCourse,tag:'Verze 3'})}
+    ${chRow({id:'codes',kind:'check',on:CFG.codes,icon:'tagx',t:'Slevové kódy a poukazy',d:'Kódy na workshopy a dárkové poukazy.',price:ADDS.codes,tag:'Verze 3'})}</div>${noteBox('navic')}`;
   if(id==='provoz')return `${lbl('Provoz a péče','Od spuštění, navíc k ceně za vývoj')}<div class="card care"><div class="care-top"><div><p class="care-price" id="careP"></p><p class="t-cap" id="careN"></p></div>
     <div class="sw" role="group" aria-label="Způsob placení provozu" data-sw="care"><span class="sw-th"></span><button data-v="year">Ročně</button><button data-v="month">Měsíčně</button></div></div>
     <div class="incl">${[['server','Hosting a databáze'],['cloud','Zálohy až 30 dní zpět'],['mail','E-maily do 3 000 měsíčně'],['play','Videa v ceně'],['shield','Aktualizace a dohled'],['pen','Drobné úpravy do 1 h měsíčně']].map(x=>`<div class="inc sm">${ic(x[0])}<p>${x[1]}</p></div>`).join('')}</div>
-    <button class="linkb" data-go="jak-to-funguje">Co přesně provoz zahrnuje</button></div>${noteBox('provoz')}`;
+    <button class="linkb" data-modal="provoz">Co přesně provoz zahrnuje</button></div>${noteBox('provoz')}`;
   if(id==='o-tobe'){const chip=(grp,v,on)=>`<button class="pchip glow ${on?'on':''}" data-pc="${grp}" data-v="${esc(v)}" aria-pressed="${on}">${on?ic('check'):''}${esc(v)}</button>`;
-    return `<p class="t-cap xlead">Pár věcí, které potřebuju vědět, než začneme. Vyplň, co víš, zbytek doladíme.</p>
-    <div class="qblock card"><div class="qh"><span class="tile">${ic('bank')}</span><div><p class="t-strong">U jaké banky máš účet, kam půjdou platby?</p><p class="t-cap">Kvůli QR platbám a pozdějšímu párování. Můžeš vybrat víc.</p></div></div>
+    return `<p class="t-cap xlead">Podklady potřebné před zahájením. Stačí vyplnit, co je známé, zbytek se doladí.</p>
+    <div class="qblock card"><div class="qh"><span class="tile">${ic('bank')}</span><div><p class="t-strong">Banka pro příjem plateb</p><p class="t-cap">Kvůli QR platbám a pozdějšímu párování. Lze vybrat víc možností.</p></div></div>
       <div class="pchips">${BANKS.map(b=>chip('banks',b,CFG.banks.includes(b))).join('')}</div><input type="text" class="tin" data-tf="bankOther" placeholder="Jiná banka" value="${esc(CFG.bankOther)}"></div>
-    <div class="qblock card"><div class="qh"><span class="tile">${ic('receipt')}</span><div><p class="t-strong">Fakturace</p><p class="t-cap">Jestli jsi plátce DPH a v čem děláš faktury.</p></div></div>
-      <div class="sw sw3" role="group" aria-label="Plátce DPH" data-sw="vat"><span class="sw-th"></span><button data-v="ano">Plátce DPH</button><button data-v="ne">Neplátce</button><button data-v="nevim">Nevím</button></div>
+    <div class="qblock card"><div class="qh"><span class="tile">${ic('receipt')}</span><div><p class="t-strong">Fakturace</p><p class="t-cap">Režim DPH a nástroj pro vystavování faktur.</p></div></div>
+      <div class="sw" role="group" aria-label="Plátce DPH" data-sw="vat"><span class="sw-th"></span><button data-v="ano">Plátce DPH</button><button data-v="ne">Neplátce DPH</button></div>
       <div class="pchips">${INVT.map(b=>chip('invTool',b,CFG.invTool.includes(b))).join('')}</div><input type="text" class="tin" data-tf="invOther" placeholder="Jiný nástroj" value="${esc(CFG.invOther)}"></div>
     <div class="qblock card"><div class="qh"><span class="tile">${ic('globe2')}</span><div><p class="t-strong">Doména topspeaker.cz</p><p class="t-cap">Volná k 6. 11. 2026, kolem 200 Kč ročně.</p></div></div>
-      <div class="chs">${[['self','Koupím ji sám'],['vojta','Zařiď ji ty, přefakturuješ mi ji'],['other','Mám jinou doménu']].map(([v,t])=>`<button class="ch ch-s glow ${CFG.domain===v?'on':''}" role="radio" aria-checked="${CFG.domain===v}" data-dom="${v}"><span class="ch-tx"><span class="ch-t">${t}</span></span><span class="ind radio">${ic('check')}</span></button>`).join('')}</div>
+      <div class="chs">${[['self','Registraci zajistí provozovatel'],['vojta','Registraci zajistí dodavatel a doménu přefakturuje'],['other','Jiná doména']].map(([v,t])=>`<button class="ch ch-s glow ${CFG.domain===v?'on':''}" role="radio" aria-checked="${CFG.domain===v}" data-dom="${v}"><span class="ch-tx"><span class="ch-t">${t}</span></span><span class="ind radio">${ic('check')}</span></button>`).join('')}</div>
       <input type="text" class="tin" data-tf="domainOther" placeholder="Jaká doména?" value="${esc(CFG.domainOther)}" ${CFG.domain==='other'?'':'hidden'}></div>
-    <div class="qblock card"><div class="qh"><span class="tile">${ic('cal')}</span><div><p class="t-strong">Termíny a ceny workshopů</p><p class="t-cap">Co už máš naplánované na první měsíce.</p></div></div>
+    <div class="qblock card"><div class="qh"><span class="tile">${ic('cal')}</span><div><p class="t-strong">Termíny a ceny workshopů</p><p class="t-cap">Plánované termíny a ceny na první měsíce.</p></div></div>
       <textarea class="tin" data-tf="terms" placeholder="Např. Základ 12. 11., 2 400 Kč, 8 míst">${esc(CFG.terms)}</textarea></div>
-    <div class="qblock card"><div class="qh"><span class="tile">${ic('spark')}</span><div><p class="t-strong">Tvoje vize projektu</p><p class="t-cap">Kam chceš TOP Speaker za rok nebo dva dostat. Klidně se rozepiš.</p></div></div>
-      <textarea class="tin tall" data-tf="vision" placeholder="Co pro tebe bude úspěch?">${esc(CFG.vision)}</textarea></div>`}
+    <div class="qblock card"><div class="qh"><span class="tile">${ic('spark')}</span><div><p class="t-strong">Tvoje vize projektu</p><p class="t-cap">Kam má TOP Speaker za rok nebo dva dorůst. Prostor pro libovolně dlouhý text.</p></div></div>
+      <textarea class="tin tall" data-tf="vision" placeholder="Co bude znamenat úspěch?">${esc(CFG.vision)}</textarea></div>`}
   if(id==='shrnuti'){const p=priceOf();const todo=[['Banka',CFG.banks.length||CFG.bankOther],['Fakturace',CFG.vat],['Doména',CFG.domain],['Termíny workshopů',CFG.terms.trim()],['Vize projektu',CFG.vision.trim()]];
     return `<div class="card sumtab"><div class="tscroll"><table class="xtbl"><tbody>
+      <tr><td><b>Návrh designu a klikací prototyp</b><br><span class="t-cap">Hotová beta verze</span></td><td><s class="strike">${fmtK(DESIGN)}</s> v ceně</td></tr>
       <tr><td><b>Základ MVP</b><br><span class="t-cap">Appka, účty, diagnostika, workshopy, QR platby, přehled lidí, spuštění</span></td><td>${fmtK(BASE)}</td></tr>
       ${p.adds.map(k=>`<tr><td>${ADDNAMES[k]}</td><td>+ ${fmtK(ADDS[k])}</td></tr>`).join('')}
       <tr class="tsub"><td>Běžná cena</td><td>${fmtK(p.full)}</td></tr>
-      <tr><td>Sleva pro první projekt výměnou za referenci</td><td>− ${fmtK(p.disc)}</td></tr>
-      <tr class="ttot"><td>Zaváděcí cena</td><td>${fmtK(p.intro)}</td></tr></tbody></table></div></div>
-    <div class="grid2x"><div class="card stack"><p class="t-strong">Jak zaplatit vývoj</p><div class="sw" role="group" aria-label="Způsob platby" data-sw="pay"><span class="sw-th"></span><button data-v="two">Ve dvou částech</button><button data-v="split">Rozložit</button></div>
+      <tr><td>Zvýhodnění pro pilotní verzi</td><td>− ${fmtK(p.disc)}</td></tr>
+      <tr class="ttot"><td>Pilotní cena</td><td>${fmtK(p.intro)}</td></tr></tbody></table></div></div>
+    <div class="grid2x"><div class="card stack"><p class="t-strong">Platba za vývoj</p><div class="sw" role="group" aria-label="Způsob platby" data-sw="pay"><span class="sw-th"></span><button data-v="two">Ve dvou částech</button><button data-v="split">Rozložit</button></div>
       <div id="schedHost">${schedHTML(p)}</div></div>
-      <div class="card stack"><p class="t-strong">Provoz a dodání</p><div class="kvs"><div class="kv2"><span>Provoz a péče</span><span>${p.care}</span></div><div class="kv2"><span>Odhad dodání</span><span>zhruba ${p.weeks} týdnů</span></div><div class="kv2"><span>Záruka na chyby</span><span>30 dní</span></div></div></div></div>
-    <div class="card stack"><p class="t-strong">Co ještě zbývá doplnit</p><div class="todo">${todo.map(([t,ok])=>`<span class="${ok?'ok':''}">${ic(ok?'check':'clock')}${t}</span>`).join('')}</div>${todo.some(x=>!x[1])?'<button class="linkb" data-step="8">Doplnit v kroku O tobě</button>':''}</div>
+      <div class="card stack"><p class="t-strong">Provoz a dodání</p><div class="kvs"><div class="kv2"><span>Provoz a péče</span><span>${p.care}</span></div><div class="kv2"><span>Odhad dodání</span><span>zhruba ${p.weeks} týdnů</span></div><div class="kv2"><span>Opravy po spuštění</span><span>30 dní zdarma</span></div></div></div></div>
+    <div class="card stack"><p class="t-strong">Co ještě zbývá doplnit</p><div class="todo">${todo.map(([t,ok])=>`<span class="${ok?'ok':''}">${ic(ok?'check':'clock')}${t}</span>`).join('')}</div>${todo.some(x=>!x[1])?'<button class="linkb" data-step="8">Doplnit v kroku Podklady</button>':''}</div>
     ${noteBox('shrnuti')}
-    <div class="sendbox card" id="sendBox">${CFG.sentAt?sentHTML():`<p class="t-cap">Odesláním nic neobjednáváš. Vojta uvidí tvůj výběr a ozve se s finálním rozsahem.</p><button class="btn btn-primary" id="sendBtn">${ic('arrow')}Odeslat Vojtovi</button>`}</div>`}
+    <div class="sendbox card" id="sendBox">${CFG.sentAt?sentHTML():`<p class="t-cap">Odeslání není závazná objednávka. Výběr se uloží a na jeho základě vznikne finální rozsah.</p><button class="btn btn-primary" id="sendBtn">${ic('arrow')}Odeslat výběr</button>`}</div>`}
   return '';
 }
 const schedHTML=p=>p.sched.map(([t,v])=>`<div class="kv2"><span>${t}</span><span>${fmtK(v)}</span></div>`).join('');
@@ -1546,11 +1577,11 @@ function cDrawStep(){
 }
 function cDrawSum(){
   const p=priceOf();const s=$('#cfgSum');if(!s)return;
-  s.innerHTML=`<p class="t-cap">Běžná cena</p><p class="sold">${fmtK(p.full)}</p><p class="t-cap" style="margin-top:8px">Zaváděcí cena</p><p class="sbig">${fmtK(p.intro)}</p>
-    <p class="t-cap">Sleva pro první projekt výměnou za referenci.</p>
+  s.innerHTML=`<p class="t-cap">Běžná cena</p><p class="sold">${fmtK(p.full)}</p><p class="t-cap" style="margin-top:8px">Pilotní cena</p><p class="sbig">${fmtK(p.intro)}</p>
+    <p class="t-cap">Pilotní cena pro první ostrou verzi.</p>
     <div class="kvs"><div class="kv2"><span>Základ MVP</span><span>${fmtK(BASE)}</span></div>${p.adds.length?`<div class="kv2"><span>Navíc (${p.adds.length})</span><span>+ ${fmtK(p.full-BASE)}</span></div>`:''}<div class="kv2"><span>Provoz</span><span>${p.care}</span></div><div class="kv2"><span>Odhad dodání</span><span>${p.weeks} týdnů</span></div></div>
     <p class="t-cap savest">${saveState}</p>`;
-  const m=$('#mSum');if(m)m.innerHTML=`<div><span class="t-cap">Zaváděcí cena</span><b>${fmtK(p.intro)}</b></div><span class="t-cap">${CFG.step?'Krok '+CFG.step+' z '+(CSTEPS.length-1):'Úvod'}</span>`;
+  const m=$('#mSum');if(m)m.innerHTML=`<div><span class="t-cap">Pilotní cena</span><b>${fmtK(p.intro)}</b></div><span class="t-cap">${CFG.step?'Krok '+CFG.step+' z '+(CSTEPS.length-1):'Úvod'}</span>`;
 }
 document.addEventListener('click',e=>{const b=e.target.closest('[data-step]');if(b&&document.querySelector('.cfgpage')){e.preventDefault();cGoStep(+b.dataset.step)}});
 
@@ -1561,16 +1592,16 @@ const IDEAS=[
  ['group','Feedback od skupiny','Po výstupu na workshopu ostatní ohodnotí řečníka na telefonu. Lektor má výsledky hned.'],
  ['headph','Ukázky z podcastu Inspiro','Krátké klipy hostů jako příklady dobrého projevu ke každé kapitole.'],
  ['present','Firemní workshopy','Poptávkový formulář pro firmy: počet lidí, termín a zaměření.'],
- ['cal','Individuální konzultace','Rezervace termínu ve tvém kalendáři přímo z appky.'],
+ ['cal','Individuální konzultace','Rezervace termínu v kalendáři lektora přímo z appky.'],
  ['chart','Statistiky videokurzu','Které kapitoly lidé nedokončují a kde se zasekávají.'],
  ['phone','Appka na ploše telefonu','Ikona na ploše jako u běžné aplikace, bez App Store.']];
 function vIdeas(){
   const votes=[['yes','Chci'],['maybe','Možná'],['no','Ne']];
   root.innerHTML=`<div class="page xpage view">${pageTop('Nápady')}
-   <header class="xhero"><span class="tag-k">Nápady</span><h1 class="t-display">Kam může TOP Speaker růst</h1><p class="t-cap xlead">Nápady mimo MVP, zatím nenaceněné. U každého můžeš dát vědět, jestli tě zajímá. Odpovědi se uloží ke konfiguraci.</p></header>
+   <header class="xhero"><span class="tag-k">Nápady</span><h1 class="t-display">Kam může TOP Speaker růst</h1><p class="t-cap xlead">Nápady mimo MVP, zatím nenaceněné. U každého lze označit zájem, volba se uloží ke konfiguraci.</p></header>
    <div class="ideas">${IDEAS.map((x,i)=>{return `<article class="card idea glow"><span class="tile">${ic(x[0])}</span><p class="t-strong">${x[1]}</p><p class="t-cap">${x[2]}</p>
      <div class="sw sw3 small" data-sw="idea${i}"><span class="sw-th"></span>${votes.map(([k,t])=>`<button data-v="${k}">${t}</button>`).join('')}</div></article>`}).join('')}</div>
-   <button class="card cta glow" data-go="konfigurator"><span class="tile">${ic('stack3')}</span><div><p class="t-title">Konfigurátor aplikace</p><p class="t-cap">Vyber rozsah MVP a pošli mi ho.</p></div>${ic('arrow','class="chev"')}</button>
+   <button class="card cta glow" data-go="konfigurator"><span class="tile">${ic('stack3')}</span><div><p class="t-title">Konfigurátor aplikace</p><p class="t-cap">Rozsah MVP, cena a odeslání výběru.</p></div>${ic('arrow','class="chev"')}</button>
    ${credit()}</div>`;
   IDEAS.forEach((x,i)=>bindSw(root,'idea'+i,CFG.ideas[x[1]]||'',v=>{CFG.ideas[x[1]]=v;cfgSave()}));
 }
@@ -1580,8 +1611,65 @@ function prevInfo(){return `<div class="pv-tl">${['Beta','MVP','V2','V3'].map((k
   <div class="pv-qr">${miniQR(2,40)}<div><b>QR platba</b><span>2 400 Kč · VS 1204</span></div></div>`}
 function prevConfig(){const p=priceOf();return `<div class="pv-cfg"><div class="pv-st">${[1,2,3,4,5].map(i=>`<i class="${i<3?'d':i===3?'a':''}">${i<3?'✓':i}</i>`).join('')}</div>
   <div class="pv-opt on"><b></b><span>E-mail a kód</span></div><div class="pv-opt"><b></b><span>Přihlášení přes Google</span></div>
-  <div class="pv-price"><span>Zaváděcí cena</span><b>${fmtK(p.intro)}</b></div></div>`}
+  <div class="pv-price"><span>Pilotní cena</span><b>${fmtK(p.intro)}</b></div></div>`}
 function prevIdeas(){return `<div class="pv-ideas">${[['mic2','Denní trénink hlasu','Chci'],['cam','Nahrávka před a po','Možná'],['group','Feedback od skupiny','']].map(x=>`<div class="pv-idea"><span class="pv-ii">${ic(x[0])}</span><span>${x[1]}</span>${x[2]?`<em>${x[2]}</em>`:''}</div>`).join('')}</div>`}
+
+/* ================= v17: modal, odpovědi, hodnota prototypu ================= */
+const DESIGN=24000;
+function openModal(title,html){
+  const old=document.querySelector('.modal');if(old)old.remove();
+  const m=document.createElement('div');m.className='modal';m.setAttribute('role','dialog');m.setAttribute('aria-modal','true');m.setAttribute('aria-label',title);
+  m.innerHTML=`<div class="modal-bg" data-close></div><div class="modal-card"><div class="modal-h"><p class="t-title">${title}</p><button class="icon-btn" data-close aria-label="Zavřít">${ic('x')}</button></div><div class="modal-b">${html}</div></div>`;
+  document.body.appendChild(m);document.body.classList.add('noscroll');
+  const close=()=>{m.remove();document.body.classList.remove('noscroll');removeEventListener('keydown',k)};
+  const k=e=>{if(e.key==='Escape')close()};addEventListener('keydown',k);
+  m.querySelectorAll('[data-close]').forEach(b=>b.onclick=close);m.querySelector('.modal-card .icon-btn').focus();
+}
+function qrVariantsHTML(){
+  const QRV=[['Jen číslo účtu','Částku je potřeba dopsat ručně.',[1,0,0,0]],['Účet a částka','Částka je předvyplněná, plátce ale nejde poznat.',[1,1,0,0]],['Účet, částka a zpráva','Ve zprávě je jméno a workshop.',[1,1,1,0]],['Účet, částka, zpráva a variabilní symbol','Každá přihláška má vlastní variabilní symbol, platba jde jednoznačně spárovat.',[1,1,1,1],1]];
+  const F=['Číslo účtu','Částka','Zpráva','Variabilní symbol'];
+  return `<div class="qrv">${QRV.map((v,i)=>`<article class="card qcard ${v[3]?'rec':''}">${v[3]?'<span class="pill blue">Doporučeno pro MVP</span>':''}<div class="qtop">${miniQR(i+1,56)}<div><p class="t-strong">${v[0]}</p><p class="t-cap">${v[1]}</p></div></div><ul class="qf">${F.map((f,j)=>`<li class="${v[2][j]?'on':''}">${ic(v[2][j]?'check':'x')}<span>${f}</span></li>`).join('')}</ul></article>`).join('')}</div>`}
+function careDetailsHTML(){
+  return `<div class="incl">${[['server','Hosting appky a databáze','Rychlé načítání po celé ČR, šifrované spojení.'],['cloud','Zálohy','Databáze jde obnovit do stavu až 30 dní zpět.'],['mail','E-maily do 3 000 měsíčně','Kódy pro přihlášení, potvrzení a připomínky.'],['play','Videa','Do 1 000 minut uložených a 8 000 zhlédnutých minut měsíčně.'],['shield','Aktualizace a dohled','Bezpečnostní aktualizace a hlídání chyb.'],['pen','Drobné úpravy','Do 1 hodiny práce měsíčně, například nový termín nebo text.']].map(x=>`<div class="inc">${ic(x[0])}<div><p class="t-strong">${x[1]}</p><p class="t-cap">${x[2]}</p></div></div>`).join('')}</div>
+  <p class="t-cap" style="margin-top:14px">Celý videokurz má kolem 48 minut, takže 8 000 zhlédnutých minut odpovídá zhruba 160 lidem, kteří ho za měsíc projdou celý. Provoz se platí od spuštění, navíc k jednorázové ceně za vývoj: 800 Kč měsíčně, nebo 8 000 Kč ročně místo 9 600 Kč.</p>`}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-modal]');if(!b)return;e.preventDefault();
+  if(b.dataset.modal==='qr')openModal('Varianty QR plateb',qrVariantsHTML());
+  if(b.dataset.modal==='provoz')openModal('Co zahrnuje provoz a péče',careDetailsHTML());});
+
+/* ================= ODPOVĚDI (pro Vojtu, bez odkazu z rozcestníku) ================= */
+const yesNo=v=>v?'Ano':'Ne';
+function answersHTML(d,title,when){
+  const C=Object.assign(CFG0(),d||{});const saved=CFG;CFG=C;const p=priceOf();CFG=saved;
+  const row=(k,v)=>`<div class="kv2"><span>${k}</span><span>${v||'<span class="t-cap">nevyplněno</span>'}</span></div>`;
+  const ideas=Object.entries(C.ideas||{}).filter(([,v])=>v);const lab={yes:'Chci',maybe:'Možná',no:'Ne'};
+  const notes=Object.entries(C.notes||{}).filter(([,v])=>v&&v.trim());
+  return `<article class="card ans-card"><div class="row between"><p class="t-title">${title}</p><span class="t-cap">${when||''}</span></div>
+   <div class="ans-grid">
+    <div><p class="ans-h">Rozsah a cena</p>${row('Přihlášení',C.login==='pass'?'E-mail a heslo':'E-mail a kód')}${p.adds.map(k=>row(ADDNAMES[k],'+ '+fmtK(ADDS[k]))).join('')}${row('Běžná cena',fmtK(p.full))}${row('Pilotní cena',fmtK(p.intro))}${row('Provoz',C.care==='year'?'Ročně 8 000 Kč':'Měsíčně 800 Kč')}${row('Platba za vývoj',C.pay==='two'?'Ve dvou částech':'Rozloženě')}</div>
+    <div><p class="ans-h">Podklady</p>${row('Banka',[...(C.banks||[]),C.bankOther].filter(Boolean).map(esc).join(', '))}${row('DPH',C.vat==='ano'?'Plátce DPH':C.vat==='ne'?'Neplátce DPH':'')}${row('Fakturace',[...(C.invTool||[]),C.invOther].filter(Boolean).map(esc).join(', '))}${row('Doména',{self:'Registruje provozovatel',vojta:'Zajistí dodavatel',other:'Jiná: '+esc(C.domainOther||'')}[C.domain]||'')}</div>
+   </div>
+   ${C.terms?`<div><p class="ans-h">Termíny workshopů</p><p class="ans-t">${esc(C.terms)}</p></div>`:''}
+   ${C.vision?`<div><p class="ans-h">Vize projektu</p><p class="ans-t">${esc(C.vision)}</p></div>`:''}
+   ${notes.length?`<div><p class="ans-h">Poznámky</p>${notes.map(([k,v])=>`<p class="ans-t"><b>${esc((CSTEPS.find(x=>x.id===k)||{t:k}).t)}:</b> ${esc(v)}</p>`).join('')}</div>`:''}
+   <div><p class="ans-h">Nápady</p>${ideas.length?`<div class="todo">${ideas.map(([k,v])=>`<span class="${v==='yes'?'ok':''}">${esc(k)}: ${lab[v]||v}</span>`).join('')}</div>`:'<p class="t-cap">Bez odpovědi</p>'}</div>
+  </article>`}
+async function vAnswers(){
+  root.innerHTML=`<div class="page xpage view">${pageTop('Odpovědi')}
+   <header class="xhero"><span class="tag-k">Odpovědi</span><h1 class="t-display">Vyplněný konfigurátor</h1><p class="t-cap xlead">Aktuální stav konfigurátoru a nápadů a každá odeslaná verze. Stránka není na rozcestníku, otevírá se přímo adresou.</p></header>
+   <div id="ansHost" class="stack-l"><p class="t-cap">Načítám…</p></div>
+   <div class="card stack" id="resetBox"><p class="t-strong">Začít znovu</p><p class="t-cap">Smaže aktuální odpovědi i odeslané verze, pro všechna zařízení.</p><button class="btn btn-ghost" id="resetAns" style="align-self:flex-start">${ic('refresh')}Smazat odpovědi</button></div>
+  </div>`;
+  let data=null;try{const r=await fetch('/api/konfigurace?vse=1',{cache:'no-store'});if(r.ok)data=await r.json()}catch(e){}
+  const host=$('#ansHost');if(!host)return;
+  if(!data){host.innerHTML=`<p class="t-cap">Databáze je dostupná jen na webu. Tady je stav uložený v tomto prohlížeči.</p>${answersHTML(CFG,'Tento prohlížeč','')}`;}
+  else{const cur=data.current||{};const sent=(data.sent||[]);
+    const fmtD=x=>x?new Date(x).toLocaleString('cs-CZ',{day:'numeric',month:'numeric',hour:'2-digit',minute:'2-digit'}):'';
+    host.innerHTML=(cur.updatedAt?answersHTML(cur,cur.sentAt?'Aktuální stav · odesláno':'Aktuální stav · rozpracováno','Naposledy uloženo '+fmtD(cur.savedAt||cur.updatedAt)):'<div class="card"><p class="t-cap">Zatím nikdo nic nevyplnil.</p></div>')
+      +(sent.length?`<p class="t-title">Odeslané verze</p>`+sent.map(x=>answersHTML(x.data,'Odesláno',fmtD(x.at))).join(''):'');}
+  $('#resetAns').onclick=()=>{$('#resetBox').innerHTML=`<p class="t-strong">Opravdu smazat všechny odpovědi?</p><div class="row"><button class="btn btn-ghost" id="rNo">Ne</button><button class="btn btn-primary" id="rYes">Smazat</button></div>`;
+    $('#rNo').onclick=vAnswers;$('#rYes').onclick=async()=>{let ok=false;try{const r=await fetch('/api/konfigurace',{method:'DELETE'});ok=r.ok}catch(e){}
+      CFG=CFG0();try{localStorage.removeItem(CKEY)}catch(e){}toast(ok?'Odpovědi smazané':'Smazáno jen v tomto prohlížeči');vAnswers()}};
+}
 
 /* ================= ROUTER ================= */
 const NAV=[{id:'app',t:'Domů',i:'home'},{id:'app-diagnostika',t:'Diagnostika',i:'compass'},{id:'app-kurz',t:'Videokurz',i:'play'},{id:'app-workshopy',t:'Workshopy',i:'cal'},{id:'app-profil',t:'Profil',i:'user'}];
@@ -1641,6 +1729,7 @@ function render(){
     if(r==='jak-to-funguje')return vInfo();
     if(r==='konfigurator'){vConfig();syncRemote();return}
     if(r==='napady'){vIdeas();syncRemote();return}
+    if(r==='odpovedi')return vAnswers();
     if(r==='lektor')return vLektor();
     return vHub();
   }
@@ -1694,19 +1783,19 @@ function vHub(){
        <span class="t-title">Pracovní list</span><span class="t-cap">Jeden list A4 místo sešitu. Jasné pořadí, žádné listování.</span><span class="go">Zobrazit list ${ic('arrow')}</span></button>
      <button class="door" data-go="lektor"><span class="phase">${ic('dash')}Pro lektora</span>
        <div class="preview">${prevDash()}</div>
-       <span class="t-title">Přehled pro lektora</span><span class="t-cap">Kdo přijde, s jakým cílem a levelem, a jak skupinu rozdělit.</span><span class="go">Otevřít přehled ${ic('arrow')}</span></button>
+       <span class="t-title">Přehled pro lektora</span><span class="t-cap">Kdo přijde, s jakým cílem a levelem a jak skupinu rozdělit.</span><span class="go">Otevřít přehled ${ic('arrow')}</span></button>
    </div></div>
-   <div class="dgroup"><div class="dgroup-h"><span class="t-title">Další krok</span><span class="t-cap">Jak dál a za kolik</span></div>
+   <div class="dgroup"><div class="dgroup-h"><span class="t-title">Další krok</span><span class="t-cap">Jak dál a v jakém rozsahu</span></div>
    <div class="doors">
      <button class="door" data-go="jak-to-funguje"><span class="phase">${ic('bulb')}Informace</span>
        <div class="preview">${prevInfo()}</div>
        <span class="t-title">Jak to bude fungovat</span><span class="t-cap">Verze, přihlášení, QR platby, provoz a data.</span><span class="go">Zobrazit ${ic('arrow')}</span></button>
      <button class="door" data-go="konfigurator"><span class="phase">${ic('stack3')}Konfigurátor</span>
        <div class="preview">${prevConfig()}</div>
-       <span class="t-title">Konfigurátor aplikace</span><span class="t-cap">Vyber rozsah MVP, uvidíš cenu a pošleš mi ho.</span><span class="go">Spustit ${ic('arrow')}</span></button>
+       <span class="t-title">Konfigurátor aplikace</span><span class="t-cap">Rozsah MVP, cena podle výběru a odeslání.</span><span class="go">Spustit ${ic('arrow')}</span></button>
      <button class="door" data-go="napady"><span class="phase">${ic('spark')}Nápady</span>
        <div class="preview">${prevIdeas()}</div>
-       <span class="t-title">Nápady</span><span class="t-cap">Kam může TOP Speaker růst. Dej vědět, co tě zajímá.</span><span class="go">Prohlédnout ${ic('arrow')}</span></button>
+       <span class="t-title">Nápady</span><span class="t-cap">Kam může TOP Speaker růst a co stojí za zvážení.</span><span class="go">Prohlédnout ${ic('arrow')}</span></button>
    </div></div>
    <div class="hub-foot"><button class="logout" id="logout">Odhlásit</button>${credit()}<span></span></div></div>`;
   ribbons($('#rib'),{lines:6});

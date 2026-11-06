@@ -1006,6 +1006,24 @@ html{scrollbar-gutter:stable;scrollbar-color:#2f63f0 transparent;scrollbar-width
 @media (max-width:640px){.arow{grid-template-columns:minmax(0,1fr) 116px}.arow .acell:nth-child(2),.arow .acell:nth-child(3){display:none}.ahead{display:none}.arow.pay .acell:nth-child(2){display:flex}.arow.pay{grid-template-columns:minmax(0,1fr) auto 128px}}
 .hub .dgroup,.hub .hub-foot{width:100%;max-width:1000px;margin-inline:auto}
 .hub .door .preview{height:160px}
+
+/* v23: kompaktní úvod konfigurátoru, menší hero */
+.intro{gap:12px;padding-top:0}
+.ihead{display:flex;align-items:center;gap:14px}.ihead .tsi{flex:none}
+.ihead .t-cap{margin-top:2px}
+.vtl-cfg{gap:10px;margin:2px 0 0}
+.vtl-cfg .vcard{padding:14px;gap:6px}
+.vtl-cfg .tile{width:34px;height:34px}.vtl-cfg .tile svg{width:17px;height:17px}
+.vtl-cfg .t-title{font-size:15px;line-height:1.3}
+.vtl-cfg .vlist{gap:4px}.vtl-cfg .vlist li{font-size:12.5px;line-height:1.4}
+.vprice{padding:8px 0;margin:2px 0}
+.vprice b{font-family:inherit!important;font-size:22px!important;font-weight:600!important;letter-spacing:-.03em;color:#fff!important;line-height:1.15}
+.vprice .t-cap{font-size:12.5px}
+.intro .vlegend{font-size:13px}
+.stepwrap:has(.intro) .stnav{margin-top:14px}
+@media (min-width:441px){.hub .hero-img{height:clamp(200px,31vh,300px)!important}}
+.hub .wordmark{font-size:clamp(20px,6.6vw,42px)}
+.hub{gap:24px}
 </style>
 
 </head>
@@ -1535,19 +1553,16 @@ function lbl(t,sub){return `<div class="glbl"><span>${t}</span>${sub?`<span clas
 function verPrices(){
   const V2=['google','pairing','crm2','auto','invoices'],V3=['gateway','sellCourse','codes'];
   const calc=on=>{const C=Object.assign(CFG0(),{videos:false,workbook:false});on.forEach(k=>C[k]=true);const sv=CFG;CFG=C;const p=priceOf();CFG=sv;return p.intro};
-  const m=calc([]),v2=calc(V2),v3=calc(V2.concat(V3));
-  const P=[['Hotovo','V ceně MVP',''],['Teď se naceňuje','od '+fmtK(m),'Pilotní cena základu'],['Možnost navíc','cca '+fmtK(v2),'+ '+fmtK(v2-m)+' k MVP'],['Možnost navíc','cca '+fmtK(v3),'+ '+fmtK(v3-m)+' k MVP, včetně verze 2']];
+  const m=calc([]),v2=calc(V2),v3=calc(V2.concat(V3)),vk=calc(['videos','workbook'])-m;
+  const P=[['Hotovo','V ceně MVP',''],['Teď se naceňuje','od '+fmtK(m),'Videokurz + '+fmtK(vk)],['Možnost navíc','cca '+fmtK(v2),'+ '+fmtK(v2-m)+' k MVP'],['Možnost navíc','cca '+fmtK(v3),'+ '+fmtK(v3-m)+' k MVP, včetně verze 2']];
   return `<div class="vtl vtl-cfg">${VERSIONS.map((v,i)=>`<article class="vcard ${i===0?'is-done':i===1?'is-next':''}"><div class="vtop"><span class="tile">${ic(v.icon)}</span><span class="vk">${v.k}</span></div>
     <span class="pill vst ${i<2?'blue':''}">${i===0?ic('check'):''}${P[i][0]}</span><p class="t-title">${v.t}</p>
     <div class="vprice"><b>${P[i][1]}</b>${P[i][2]?`<span class="t-cap">${P[i][2]}</span>`:''}</div>
-    <ul class="vlist">${v.f.slice(0,4).map(x=>`<li>${ic(i===0?'check':'chev')}<span>${x}</span></li>`).join('')}</ul></article>`).join('')}</div>
-    <p class="vlegend">${ic('bulb')}<span>Teď se naceňuje <b>MVP</b>. Funkce z <b>verze 2</b> a <b>verze 3</b> jde zapnout rovnou v konfigurátoru, nebo je přidat později. Uvedené jsou pilotní ceny bez videokurzu.</span></p>`}
+    <ul class="vlist">${v.f.slice(0,3).map(x=>`<li>${ic(i===0?'check':'chev')}<span>${x}</span></li>`).join('')}</ul></article>`).join('')}</div>
+    <p class="vlegend">${ic('bulb')}<span>Teď se naceňuje <b>MVP</b>. Funkce z <b>verze 2</b> a <b>verze 3</b> jde zapnout rovnou v konfigurátoru, nebo je přidat později. Ceny jsou pilotní a bez videokurzu (+ ${fmtK(vk)}), který je v konfigurátoru předvybraný.</span></p>`}
 function stepBody(id){
-  if(id==='uvod')return `<div class="intro"><div class="intro-ic">${tsIcon(72)}</div><h2 class="t-display">Konfigurátor aplikace</h2>
-    <p class="t-cap xlead">Přehled toho, co bude umět první ostrá verze, výběr doplňků a cena podle zvoleného rozsahu. Na konci se výběr odešle. Vše se průběžně ukládá, takže se k němu jde kdykoliv vrátit, i z jiného zařízení.</p>
-    ${verPrices()}
-    <div class="intro-grid">${CSTEPS.slice(1,-1).map(s=>`<span class="ig">${ic(s.i)}${s.t}</span>`).join('')}</div>
-    <p class="t-cap">Podrobnosti k platbám, provozu a datům jsou u jednotlivých kroků a v sekci Jak to bude fungovat na rozcestníku.</p></div>`;
+  if(id==='uvod')return `<div class="intro"><div class="ihead">${tsIcon(52)}<div><h2 class="t-display sm">Konfigurátor aplikace</h2><p class="t-cap">Rozsah první ostré verze, doplňky a cena. Vše se průběžně ukládá a na konci se výběr odešle.</p></div></div>
+    ${verPrices()}</div>`;
   if(id==='zaklad')return `<div class="basehead card"><div><p class="t-cap">Běžná cena základu</p><p class="bprice">${fmtK(BASE)}</p></div><p class="t-cap">Od návrhu po spuštění: vše potřebné k tomu, aby se účastníci přihlásili, zaplatili a lektor je měl v administraci.</p></div>
     <div class="bgrid">${BASEITEMS.map(b=>`<div class="bitem card glow"><span class="tile">${ic(b[0])}</span><p class="t-strong">${b[1]}</p><p class="t-cap">${b[2]}</p><span class="pill ${b[3]!=='new'?'blue':''}">${b[3]==='done'?ic('check')+'Hotovo':b[3]==='beta'?ic('check')+'Navrženo v betě':'Nové v MVP'}</span></div>`).join('')}</div>${noteBox('zaklad')}`;
   if(id==='prihlaseni')return `${lbl('Způsob přihlášení','Povinné, jedna možnost')}<div class="chs">
@@ -1640,7 +1655,7 @@ function cDrawStep(){
     $('#sendBox').innerHTML=sentHTML();toast(ok?'Odesláno':'Uloženo jen v tomto prohlížeči. Zkus to prosím znovu na webu.');const b2=$('#sendBtn');if(b2)b2.onclick=()=>cDrawStep()};
 }
 let resetAsk=false;
-const resetHTML=(c='')=>`<div class="sreset ${c}">${resetAsk?`<p class="t-cap">Vrátit celý výběr do výchozího stavu?</p><div class="row"><button class="btn btn-ghost btn-sm" data-rs="no">Ne</button><button class="btn btn-primary btn-sm" data-rs="yes">Ano, resetovat</button></div>`:`<button class="linkbtn" data-rs="ask">${ic('back')}Resetovat výběr</button>`}</div>`;
+const resetHTML=(c='')=>`<div class="sreset ${c}">${resetAsk?`<p class="t-cap">Vrátit celý výběr do výchozího stavu?</p><div class="row"><button class="btn btn-ghost btn-sm" data-rs="no">Ne</button><button class="btn btn-primary btn-sm" data-rs="yes">Ano, resetovat</button></div>`:`<button class="linkbtn" data-rs="ask">${ic('refresh')}Resetovat výběr</button>`}</div>`;
 function cDrawSum(){
   const p=priceOf();const s=$('#cfgSum');if(!s)return;
   s.innerHTML=`<p class="t-cap">Běžná cena</p><p class="sold">${fmtK(p.full)}</p><p class="t-cap" style="margin-top:8px">Pilotní cena</p><p class="sbig">${fmtK(p.intro)}</p>

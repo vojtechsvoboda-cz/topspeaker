@@ -968,6 +968,35 @@ html{scrollbar-gutter:stable;scrollbar-color:#2f63f0 transparent;scrollbar-width
 .hb-t small{font-size:12px;color:var(--muted)}
 .homeback.compact{padding:4px;gap:6px}
 .side .homeback{margin:0 0 18px;padding:6px 10px 6px 6px}
+/* admin */
+.shell.admin .side{background:linear-gradient(180deg,rgba(18,26,64,.85),rgba(5,8,18,.7))}
+.adm-badge{display:flex;align-items:center;gap:10px;margin:0 0 14px;padding:10px 12px;border-radius:14px;border:1px solid rgba(120,175,255,.3);background:rgba(59,130,255,.1)}
+.adm-badge svg{width:18px;height:18px;color:var(--accent-hi)}
+.adm-badge span{display:flex;flex-direction:column;line-height:1.2}
+.adm-badge b{font-size:14px;font-weight:600}
+.adm-badge small{font-size:12px;color:var(--muted)}
+.adm-chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:5px 10px;border-radius:99px;background:rgba(59,130,255,.16);color:#cfe7ff;border:1px solid rgba(120,175,255,.3)}
+.adm-chip svg{width:13px;height:13px}
+.adm-chip.lg{font-size:13px;padding:6px 12px}
+.adm-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
+@media (max-width:959px){.adm-head .adm-chip{display:none}}
+.shell.admin .tabbar .adm-navl{grid-template-columns:repeat(4,1fr)}
+.kpi.clickable{text-align:left;cursor:pointer;color:inherit;font:inherit}
+.atable{padding:4px 0}
+.arow{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr) minmax(0,1fr) 128px;gap:14px;align-items:center;padding:12px 18px;border-top:1px solid var(--line)}
+.arow.pay{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr) 150px}
+.arow>.acell:last-child{align-items:flex-end;text-align:right}
+.arow:first-child{border-top:0}
+.ahead{font-size:12px;color:var(--muted);font-weight:500;padding-block:10px}
+.acell-n{display:flex;gap:12px;align-items:center;min-width:0}
+.acell-n>span:last-child{display:flex;flex-direction:column;min-width:0}
+.acell-n small,.acell small{font-size:12.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.acell{display:flex;flex-direction:column;gap:4px;min-width:0}
+.avatar.sm{width:34px;height:34px;flex:none;font-size:14px}
+.mini-prog.wide{max-width:120px;margin-top:0}
+@media (max-width:640px){.arow{grid-template-columns:minmax(0,1fr) 116px}.arow .acell:nth-child(2),.arow .acell:nth-child(3){display:none}.ahead{display:none}.arow.pay .acell:nth-child(2){display:flex}.arow.pay{grid-template-columns:minmax(0,1fr) auto 128px}}
+.hub .dgroup,.hub .hub-foot{width:100%;max-width:1000px;margin-inline:auto}
+.hub .door .preview{height:160px}
 </style>
 
 </head>
@@ -1461,28 +1490,28 @@ async function syncRemote(){if(syncing)return syncing;syncing=(async()=>{try{
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&['konfigurator','napady'].includes(curRoute()))syncRemote()});
 function setSaveUI(t){saveState=t;document.querySelectorAll('.savest').forEach(el=>el.textContent=t)}
 
-const BASE=50000;
+const BASE=74000;
 const ADDS={pass:2000,google:2000,pairing:8000,gateway:12000,crm2:8000,videos:8000,workbook:4000,auto:4000,invoices:6000,sellCourse:8000,codes:4000};
-const ADDNAMES={pass:'Přihlášení e-mailem a heslem',google:'Přihlášení přes Google',pairing:'Automatické párování plateb',gateway:'Platební brána',crm2:'Rozšířený přehled lidí',videos:'Videokurz s vlastními videi',workbook:'Přepis workbooku do kapitol',auto:'Automatické e-maily',invoices:'Automatické faktury',sellCourse:'Prodej videokurzu samostatně',codes:'Slevové kódy a poukazy'};
+const ADDNAMES={pass:'Přihlášení e-mailem a heslem',google:'Přihlášení přes Google',pairing:'Automatické párování plateb',gateway:'Platební brána',crm2:'Rozšířená administrace',videos:'Videokurz s vlastními videi',workbook:'Přepis workbooku do kapitol',auto:'Automatické e-maily',invoices:'Automatické faktury',sellCourse:'Prodej videokurzu samostatně',codes:'Slevové kódy a poukazy'};
 function selectedAdds(){const a=[];if(CFG.login==='pass')a.push('pass');['google','pairing','gateway','crm2','videos','workbook','auto','invoices','sellCourse','codes'].forEach(k=>{if(CFG[k])a.push(k)});return a}
-function priceOf(){const adds=selectedAdds();const full=BASE+adds.reduce((s,k)=>s+ADDS[k],0);const intro=Math.floor(full*0.8/2000)*2000;
-  const weeks=Math.max(4,Math.round(full/62000*6/2)*2);
+function priceOf(){const adds=selectedAdds();const full=BASE+adds.reduce((s,k)=>s+ADDS[k],0);const intro=Math.floor(full*0.75/2000)*2000;
+  const weeks=Math.max(4,Math.round((full-24000)/62000*6/2)*2);
   let sched;if(CFG.pay==='two'){const h=Math.round(intro/2/100)*100;sched=[['Při startu',h],['Po spuštění',intro-h]]}
   else{const st=Math.round(intro/3/2000)*2000;const m=Math.round((intro-st)/8/100)*100;sched=[['Při startu',st],['Pak 8× měsíčně',m]]}
   return{full,intro,disc:full-intro,adds,weeks,sched,care:CFG.care==='year'?'<s class="strike">9 600</s> 8 000 Kč ročně':'800 Kč měsíčně'}}
 
 const CSTEPS=[
  {id:'uvod',t:'Úvod',i:'spark'},{id:'zaklad',t:'Základ MVP',i:'stack3'},{id:'prihlaseni',t:'Přihlášení',i:'key'},{id:'platby',t:'Platby',i:'qr'},
- {id:'prehled',t:'Přehled lidí',i:'group'},{id:'videokurz',t:'Videokurz',i:'play'},{id:'navic',t:'Navíc',i:'plus'},{id:'provoz',t:'Provoz',i:'server'},
+ {id:'prehled',t:'Administrace',i:'key'},{id:'videokurz',t:'Videokurz',i:'play'},{id:'navic',t:'Navíc',i:'plus'},{id:'provoz',t:'Provoz',i:'server'},
  {id:'o-tobe',t:'Podklady',i:'pen'},{id:'shrnuti',t:'Shrnutí',i:'check'}];
 const BASEITEMS=[
+ ['compass','Návrh a klikací prototyp','Vzhled, logo a průchod appkou. Hotové v betě.','done'],
  ['globe2','Ostrá appka na vlastní doméně','Převod bety, databáze, testovací prostředí a zálohy.','beta'],
- ['key','Účty a přihlášení kódem','Přihlášení e-mailem a jednorázovým kódem, profil se jménem.','new'],
+ ['key','Účty a e-maily','Přihlášení e-mailem a kódem, profil se jménem, potvrzovací e-maily.','new'],
  ['hexa','Diagnostika a persona','Hexagon a persona se uloží do profilu a jsou vidět v přehledu.','beta'],
  ['cal','Workshopy a přihlášky','Termíny, kapacita, odemykání a potvrzovací e-maily.','beta'],
  ['qr','QR platby','QR kód s částkou a variabilním symbolem, potvrzení v přehledu.','new'],
- ['group','Přehled lidí','Tabulka s filtry, detail člověka, správa workshopů a export.','beta'],
- ['mail','E-maily','Kód pro přihlášení, potvrzení přihlášky a platby.','new'],
+ ['group','Administrace lektora','Účastníci s filtry, workshopy, potvrzení plateb a export.','beta'],
  ['shield','Testování a spuštění','Mobil i počítač, zkušební průchody, předání a krátký návod.','new']];
 const BANKS=['Fio banka','Česká spořitelna','ČSOB','Komerční banka','Raiffeisenbank','Air Bank','mBank','UniCredit Bank','MONETA','Revolut'];
 const INVT=['Fakturoid','iDoklad','Pohoda','Money S3','Řeší účetní'];
@@ -1499,9 +1528,8 @@ function stepBody(id){
     <p class="t-cap xlead">Přehled toho, co bude umět první ostrá verze, výběr doplňků a cena podle zvoleného rozsahu. Na konci se výběr odešle. Vše se průběžně ukládá, takže se k němu jde kdykoliv vrátit, i z jiného zařízení.</p>
     <div class="intro-grid">${CSTEPS.slice(1,-1).map(s=>`<span class="ig">${ic(s.i)}${s.t}</span>`).join('')}</div>
     <p class="t-cap">Podrobnosti k platbám, provozu a datům jsou u jednotlivých kroků a v sekci Jak to bude fungovat na rozcestníku.</p></div>`;
-  if(id==='zaklad')return `<div class="basehead card"><div><p class="t-cap">Běžná cena základu</p><p class="bprice">${fmtK(BASE)}</p></div><p class="t-cap">Vše potřebné k tomu, aby se účastníci přihlásili, zaplatili a byli vidět v přehledu.</p></div>
-    <div class="card protoline"><span class="tile">${ic('check')}</span><div><p class="t-strong">Návrh designu a klikací prototyp</p><p class="t-cap">Hotová beta: vizuální styl, logo, obrazovky appky, pracovní list a přehled pro lektora.</p></div><div class="proto-p"><s class="strike">${fmtK(DESIGN)}</s><span>v ceně</span></div></div>
-    <div class="bgrid">${BASEITEMS.map(b=>`<div class="bitem card glow"><span class="tile">${ic(b[0])}</span><p class="t-strong">${b[1]}</p><p class="t-cap">${b[2]}</p><span class="pill ${b[3]==='beta'?'blue':''}">${b[3]==='beta'?ic('check')+'Navrženo v betě':'Nové v MVP'}</span></div>`).join('')}</div>${noteBox('zaklad')}`;
+  if(id==='zaklad')return `<div class="basehead card"><div><p class="t-cap">Běžná cena základu</p><p class="bprice">${fmtK(BASE)}</p></div><p class="t-cap">Od návrhu po spuštění: vše potřebné k tomu, aby se účastníci přihlásili, zaplatili a lektor je měl v administraci.</p></div>
+    <div class="bgrid">${BASEITEMS.map(b=>`<div class="bitem card glow"><span class="tile">${ic(b[0])}</span><p class="t-strong">${b[1]}</p><p class="t-cap">${b[2]}</p><span class="pill ${b[3]!=='new'?'blue':''}">${b[3]==='done'?ic('check')+'Hotovo':b[3]==='beta'?ic('check')+'Navrženo v betě':'Nové v MVP'}</span></div>`).join('')}</div>${noteBox('zaklad')}`;
   if(id==='prihlaseni')return `${lbl('Způsob přihlášení','Povinné, jedna možnost')}<div class="chs">
     ${chRow({id:'login:code',kind:'radio',on:CFG.login==='code',icon:'mail',t:'E-mail a jednorázový kód',d:'Bez hesel. Zadá e-mail, přijde mu kód.',incl:true,tag:'Doporučeno'})}
     ${chRow({id:'login:pass',kind:'radio',on:CFG.login==='pass',icon:'key',t:'E-mail a heslo',d:'Klasická registrace s obnovou zapomenutého hesla.',price:ADDS.pass})}</div>
@@ -1510,8 +1538,8 @@ function stepBody(id){
     ${lbl('Navíc','Volitelné')}${verLegend()}<div class="chs">
     ${chRow({id:'pairing',kind:'check',on:CFG.pairing,icon:'refresh',t:'Automatické párování plateb',d:'Appka sama potvrdí platbu podle variabilního symbolu. Napojení se upřesní podle banky.',price:ADDS.pairing,tag:'Verze 2'})}
     ${chRow({id:'gateway',kind:'check',on:CFG.gateway,icon:'card',t:'Platební brána',d:'Karta, Apple Pay a Google Pay s okamžitým potvrzením. Brána bere kolem 1–1,5 % z platby.',price:ADDS.gateway,tag:'Verze 3'})}</div>${noteBox('platby')}`;
-  if(id==='prehled')return `${lbl('Přehled lidí','V základu')}<div class="card crmdemo">${[['filter','Filtry','level, persona, workshop, zaplaceno'],['user','Detail člověka','diagnostika, platby, odpovědi'],['download','Export','do tabulky kdykoliv']].map(x=>`<div class="inc">${ic(x[0])}<div><p class="t-strong">${x[1]}</p><p class="t-cap">${x[2]}</p></div></div>`).join('')}</div>
-    ${lbl('Navíc','Volitelné')}${verLegend()}<div class="chs">${chRow({id:'crm2',kind:'check',on:CFG.crm2,icon:'tagx',t:'Rozšířený přehled',d:'Poznámky, štítky, historie a hromadný e-mail vybrané skupině, například absolventům workshopu Základ.',price:ADDS.crm2,tag:'Verze 2'})}</div>${noteBox('prehled')}`;
+  if(id==='prehled')return `${lbl('Administrace lektora','V základu')}<div class="card crmdemo">${[['filter','Filtry','level, persona, workshop, zaplaceno'],['user','Detail člověka','diagnostika, platby, odpovědi'],['download','Export','do tabulky kdykoliv']].map(x=>`<div class="inc">${ic(x[0])}<div><p class="t-strong">${x[1]}</p><p class="t-cap">${x[2]}</p></div></div>`).join('')}</div>
+    ${lbl('Navíc','Volitelné')}${verLegend()}<div class="chs">${chRow({id:'crm2',kind:'check',on:CFG.crm2,icon:'tagx',t:'Rozšířená administrace',d:'Poznámky, štítky, historie a hromadný e-mail vybrané skupině, například absolventům workshopu Základ.',price:ADDS.crm2,tag:'Verze 2'})}</div>${noteBox('prehled')}`;
   if(id==='videokurz')return `${lbl('Videokurz','Volitelné, můžeš přidat i později')}<div class="chs">
     ${chRow({id:'videos',kind:'check',on:CFG.videos,icon:'play',t:'Videokurz s vlastními videi',d:'Přehrávání jen pro přihlášené, ukládání průběhu a odemykání workshopů.',price:ADDS.videos,tag:'MVP'})}
     ${chRow({id:'workbook',kind:'check',on:CFG.workbook,icon:'book',t:'Přepis workbooku do kapitol',d:'Myšlenky, tabulky a cvičení z workbooku převedu do appky.',price:ADDS.workbook,tag:'MVP'})}</div>${noteBox('videokurz')}`;
@@ -1540,8 +1568,7 @@ function stepBody(id){
       <textarea class="tin tall" data-tf="vision" placeholder="Co bude znamenat úspěch?">${esc(CFG.vision)}</textarea></div>`}
   if(id==='shrnuti'){const p=priceOf();const todo=[['Banka',CFG.banks.length||CFG.bankOther],['Fakturace',CFG.vat],['Doména',CFG.domain],['Termíny workshopů',CFG.terms.trim()],['Vize projektu',CFG.vision.trim()]];
     return `<div class="card sumtab"><div class="tscroll"><table class="xtbl"><tbody>
-      <tr><td><b>Návrh designu a klikací prototyp</b><br><span class="t-cap">Hotová beta verze</span></td><td><s class="strike">${fmtK(DESIGN)}</s> v ceně</td></tr>
-      <tr><td><b>Základ MVP</b><br><span class="t-cap">Appka, účty, diagnostika, workshopy, QR platby, přehled lidí, spuštění</span></td><td>${fmtK(BASE)}</td></tr>
+      <tr><td><b>Základ MVP</b><br><span class="t-cap">Návrh a prototyp, appka, účty, diagnostika, workshopy, QR platby, administrace lektora, spuštění</span></td><td>${fmtK(BASE)}</td></tr>
       ${p.adds.map(k=>`<tr><td>${ADDNAMES[k]}</td><td>+ ${fmtK(ADDS[k])}</td></tr>`).join('')}
       <tr class="tsub"><td>Běžná cena</td><td>${fmtK(p.full)}</td></tr>
       <tr><td>Zvýhodnění pro pilotní verzi</td><td>− ${fmtK(p.disc)}</td></tr>
@@ -1748,6 +1775,9 @@ function render(){
     if(r==='napady'){vIdeas();syncRemote();return}
     if(r==='odpovedi')return vAnswers();
     if(r==='lektor')return vLektor();
+    if(r==='lektor-ucastnici')return vLUcast();
+    if(r==='lektor-workshopy')return vLWork();
+    if(r==='lektor-platby')return vLPlat();
     return vHub();
   }
   shell();setActive(r);
@@ -1800,7 +1830,7 @@ function vHub(){
        <span class="t-title">Pracovní list</span><span class="t-cap">Jeden list A4 místo sešitu. Jasné pořadí, žádné listování.</span><span class="go">Zobrazit list ${ic('arrow')}</span></button>
      <button class="door" data-go="lektor"><span class="phase">${ic('dash')}Pro lektora</span>
        <div class="preview">${prevDash()}</div>
-       <span class="t-title">Přehled pro lektora</span><span class="t-cap">Kdo přijde, s jakým cílem a levelem a jak skupinu rozdělit.</span><span class="go">Otevřít přehled ${ic('arrow')}</span></button>
+       <span class="t-title">Administrace lektora</span><span class="t-cap">Účastníci, workshopy a platby. Kdo přijde a s jakým cílem.</span><span class="go">Otevřít administraci ${ic('arrow')}</span></button>
    </div></div>
    <div class="dgroup"><div class="dgroup-h"><span class="t-title">Další krok</span><span class="t-cap">Jak dál a v jakém rozsahu</span></div>
    <div class="doors">
@@ -1845,44 +1875,88 @@ function vList(){
 }
 
 /* ================= LEKTOR ================= */
+/* ================= ADMINISTRACE LEKTORA (ukázka) ================= */
+const ANAV=[{id:'lektor',t:'Přehled',i:'dash'},{id:'lektor-ucastnici',t:'Účastníci',i:'group'},{id:'lektor-workshopy',t:'Workshopy',i:'cal'},{id:'lektor-platby',t:'Platby',i:'qr'}];
+const APEOPLE=PEOPLE.map((p,i)=>Object.assign({},p,{ws:'zaklad-11',vs:'1211'+String(i+1).padStart(2,'0'),paid:[true,true,false,true,false,true][i%6],videos:[7,3,5,1,7,2][i%6]}));
+const PAYSTATE={};
+function adminShell(r,title,body){
+  const nav=ANAV.map(n=>`<button class="nav-i" data-tab="${n.id}" data-go="${n.id}">${ic(n.i)}<span>${n.t}</span></button>`).join('');
+  root.innerHTML=`<div class="shell admin">
+    <aside class="side" aria-label="Administrace">
+      <button class="homeback" data-go="" aria-label="Zpět na rozcestník"><span class="hb-arrow">${ic('back')}</span>${tsIcon(30,'sm')}<span class="hb-t"><b>TOP Speaker</b><small>Zpět na rozcestník</small></span></button>
+      <div class="adm-badge">${ic('key')}<span><b>Administrace</b><small>Jen pro lektora</small></span></div>
+      ${nav}
+      <div class="foot"><p class="t-cap">Ukázková data</p></div>
+    </aside>
+    <header class="mbar"><div class="mbar-in"><button class="homeback compact" data-go="" aria-label="Zpět na rozcestník"><span class="hb-arrow">${ic('back')}</span>${tsIcon(30,'sm')}</button><span class="mbar-title">${title}</span><span class="adm-chip">${ic('key')}Admin</span></div></header>
+    <main class="content" id="appview"><div class="stack-l view">
+      <div class="adm-head"><div><p class="t-cap">Administrace · Lektor</p><h1 class="t-display">${title}</h1></div><span class="adm-chip lg">${ic('key')}Admin</span></div>
+      ${body}</div></main>
+    <nav class="tabbar" aria-label="Administrace"><div class="navl adm-navl">${nav}</div></nav>
+  </div>`;
+  shellBuilt=false;setActive(r);
+}
 function vLektor(){
-  const people=PEOPLE.slice();
-  if(S.done)people.push({n:'Ty',p:S.diag.purpose[0]||'life',exp:S.diag.exp||0,s:S.diag.scores,drags:S.diag.drags,goal:GOALS.filter(g=>S.diag.goals.includes(g.id)).map(g=>g.t).join(', ')||S.diag.note,you:true});
+  const people=APEOPLE.slice();
   const avg={};AREAS.forEach(a=>{avg[a.id]=people.reduce((s,p)=>s+val(p.s,a.id),0)/people.length});
   const gp=personaOf(avg);
   const dc={};people.forEach(p=>p.drags.forEach(d=>dc[d]=(dc[d]||0)+1));
   const topD=Object.entries(dc).sort((a,b)=>b[1]-a[1]).slice(0,4);const maxD=topD.length?topD[0][1]:1;
-  const lv=people.map(p=>levelOf(p.s,p.exp));
-  const pc={};people.forEach(p=>pc[p.p]=(pc[p.p]||0)+1);const topP=Object.entries(pc).sort((a,b)=>b[1]-a[1])[0];
-  root.innerHTML=`<div class="page view">
-   <div class="pbar"><button class="homeback" data-go="" aria-label="Zpět na rozcestník"><span class="hb-arrow">${ic('back')}</span>${tsIcon(30,'sm')}<span class="hb-t"><b>TOP Speaker</b><small>Zpět na rozcestník</small></span></button><span class="t-cap">Ukázková data</span></div>
-   <div class="stack-l">
-    <div class="stack" style="gap:8px"><h1 class="t-display">Přehled pro lektora</h1><p class="t-cap">Takhle bys před workshopem viděl, kdo přijde. ${S.done?'Tvoje vlastní diagnostika je v seznamu jako „Ty“.':'Projdi diagnostiku v appce a objevíš se v seznamu.'}</p></div>
+  const lv=people.map(p=>levelOf(p.s,p.exp));const unpaid=people.filter(p=>!(PAYSTATE[p.vs]??p.paid)).length;
+  adminShell('lektor','Přehled',`
     <div class="card stack">
-      <div class="row between"><div class="row" style="gap:14px"><span class="tile">${ic('cal')}</span><div><p class="t-title">TOP Speaker · Základ</p><p class="t-cap">${WS.date} · ${WS.time} · ${WS.place}</p></div></div><span class="pill blue">${people.length} z 8 míst</span></div>
+      <div class="row between"><div class="row" style="gap:14px;flex-wrap:nowrap"><span class="tile">${ic('cal')}</span><div><p class="t-title">Nejbližší: TOP Speaker · Základ</p><p class="t-cap">${WS.date} · ${WS.time}</p></div></div><span class="pill blue">${people.length} z 8 míst</span></div>
       <div class="bar"><b style="width:${Math.min(100,people.length/8*100)}%"></b></div>
     </div>
     <div class="kpis">
-      <div class="kpi"><p class="t-cap">Přihlášení</p><p class="v">${people.length}</p></div>
+      <button class="kpi glow clickable" data-go="lektor-ucastnici"><p class="t-cap">Přihlášení</p><p class="v">${people.length}</p></button>
+      <button class="kpi glow clickable" data-go="lektor-platby"><p class="t-cap">Čeká na platbu</p><p class="v">${unpaid}</p></button>
       <div class="kpi"><p class="t-cap">Úroveň Základ</p><p class="v">${lv.filter(l=>l===0).length}</p></div>
-      <div class="kpi"><p class="t-cap">Nejčastější cíl</p><p class="v" style="font-size:17px;margin-top:6px;letter-spacing:-.02em">${PURPOSES.find(p=>p.id===topP[0]).t}</p></div>
     </div>
     <div class="dgrid">
-      <div class="card stack"><div class="row between"><p class="t-title">Profil skupiny</p><span class="pill blue">Persona skupiny: ${gp.name}</span></div>
+      <div class="card stack"><div class="row between"><p class="t-title">Profil skupiny</p><span class="pill blue">${gp.name}</span></div>
         <div style="display:grid;place-items:center">${hexStatic([{v:vals(avg),stroke:'#7fb0ff',fill:'rgba(79,140,255,.22)'}])}</div>
-        <p class="t-cap">Skupina je nejslabší v oblasti <span class="t-strong" style="color:var(--fg)">${gp.grow.name}</span>. Tam dej největší část workshopu.</p></div>
+        <p class="t-cap">Skupina je nejslabší v oblasti <span class="t-strong" style="color:var(--fg)">${gp.grow.name}</span>. Tam stojí za to dát největší část workshopu.</p></div>
       <div class="card stack"><p class="t-title">Co skupinu nejvíc stahuje</p>
         <div>${topD.map(([id,n])=>{const d=DRAGS.find(x=>x.id===id);return `<div class="hbar">${ic(d.icon)}<div><span>${d.t}</span><div class="tr"><b style="width:${n/maxD*100}%"></b></div></div><span class="n">${n}×</span></div>`}).join('')}</div>
-        <p class="t-cap">Konkrétní témata, na která se připravíš dopředu.</p></div>
-      <div class="card stack wide"><p class="t-title">Účastníci</p>
-        <div>${people.map(p=>{const pe=personaOf(p.s);const l=LEVELS[levelOf(p.s,p.exp)];return `<div class="person"><span class="avatar">${p.n[0]}</span>
-          <div style="min-width:0"><div class="row" style="gap:8px"><span class="t-strong">${esc(p.n)}</span><span class="t-cap">${pe.name} · ${l.name}</span></div>
-          <p class="t-cap" style="margin-top:4px">${PURPOSES.find(x=>x.id===p.p).t} · ${esc(p.goal)}</p></div>${miniHex(p.s,'#7fb0ff')}</div>`}).join('')}</div></div>
+        <p class="t-cap">Konkrétní témata k přípravě dopředu.</p></div>
       <div class="card stack wide"><p class="t-title">Doporučené rozdělení</p><p class="t-cap">Podle levelu z diagnostiky. Každá skupina dostane jiné tempo a jiný poměr teorie a praxe.</p>
         <div class="groups">${[0,1].map(g=>{const ns=people.filter((p,i)=>(g===0?lv[i]===0:lv[i]>0));return `<div class="group"><p class="t-strong">${g===0?'Skupina Základ':'Skupina Praxe'}</p><p class="t-cap">${g===0?'Víc teorie, nervozita a hlas':'Víc mluvení, kamera a feedback'}</p><div class="names">${ns.map(p=>`<span class="pill">${esc(p.n)}</span>`).join('')||'<span class="t-cap">Nikdo</span>'}</div></div>`}).join('')}</div></div>
-    </div>
-   </div></div>`;
+    </div>`);
 }
+let AFILTER='all';
+function vLUcast(){
+  const F=[['all','Všichni'],['zaklad','Level Základ'],['praxe','Praxe a výš'],['unpaid','Nezaplaceno']];
+  const list=APEOPLE.filter(p=>{const l=levelOf(p.s,p.exp);const paid=PAYSTATE[p.vs]??p.paid;return AFILTER==='all'||(AFILTER==='zaklad'&&l===0)||(AFILTER==='praxe'&&l>0)||(AFILTER==='unpaid'&&!paid)});
+  adminShell('lektor-ucastnici','Účastníci',`
+    <div class="row between"><div class="pchips">${F.map(([k,t])=>`<button class="pchip glow ${AFILTER===k?'on':''}" data-af="${k}" aria-pressed="${AFILTER===k}">${AFILTER===k?ic('check'):''}${t}</button>`).join('')}</div><button class="btn btn-ghost btn-sm" data-demo>${ic('download')}Export</button></div>
+    <div class="card atable"><div class="arow ahead"><span>Účastník</span><span>Persona a level</span><span>Videokurz</span><span>Platba</span></div>
+      ${list.map(p=>{const pe=personaOf(p.s);const l=LEVELS[levelOf(p.s,p.exp)];const paid=PAYSTATE[p.vs]??p.paid;return `<div class="arow"><span class="acell-n"><span class="avatar sm">${p.n[0]}</span><span><b>${esc(p.n)}</b><small>${esc(p.goal)}</small></span></span>
+        <span class="acell"><span class="t-strong">${pe.name}</span><small>${l.name}</small></span>
+        <span class="acell"><span class="mini-prog wide"><b style="width:${p.videos/7*100}%"></b></span><small>${p.videos} ze 7</small></span>
+        <span class="acell">${paid?`<span class="pill blue">${ic('check')}Zaplaceno</span>`:'<span class="pill lock">Čeká</span>'}</span></div>`}).join('')||'<p class="t-cap" style="padding:14px">Nikdo neodpovídá filtru.</p>'}
+    </div>`);
+  root.querySelectorAll('[data-af]').forEach(b=>b.onclick=()=>{AFILTER=b.dataset.af;vLUcast()});
+}
+function vLWork(){
+  adminShell('lektor-workshopy','Workshopy',`
+    <div class="row between"><p class="t-cap">Termíny, kapacita a přihlášky.</p><button class="btn btn-primary btn-sm" data-demo>${ic('plus')}Nový termín</button></div>
+    <div class="stack">${WORKSHOPS.map(w=>`<div class="card ws">${wsDate(w)}<div class="ws-main"><span class="t-title">${w.title}</span><div class="metas">${meta('clock',w.indiv?w.time:w.date+' · '+w.time)}${meta('ticket',w.price)}</div>
+      ${w.indiv?'':`<div class="cap"><div class="bar"><b style="width:${w.taken/w.cap*100}%"></b></div><span class="t-cap">${w.taken} z ${w.cap} přihlášených</span></div>`}</div>
+      <span class="ws-side">${w.past?'<span class="pill">Proběhlo</span>':`<button class="btn btn-ghost btn-sm" data-demo>${ic('pen')}Upravit</button>`}</span></div>`).join('')}</div>`);
+}
+function vLPlat(){
+  const list=APEOPLE.map(p=>Object.assign({},p,{paid:PAYSTATE[p.vs]??p.paid}));const wait=list.filter(p=>!p.paid),done=list.filter(p=>p.paid);
+  const row=p=>`<div class="arow pay"><span class="acell-n"><span class="avatar sm">${p.n[0]}</span><span><b>${esc(p.n)}</b><small>TOP Speaker · Základ</small></span></span>
+    <span class="acell"><span class="t-strong">2 400 Kč</span><small>VS ${p.vs}</small></span>
+    <span class="acell">${p.paid?`<span class="pill blue">${ic('check')}Zaplaceno</span>`:`<button class="btn btn-primary btn-sm" data-pay="${p.vs}">${ic('check')}Zaplaceno</button>`}</span></div>`;
+  adminShell('lektor-platby','Platby',`
+    <div class="card row" style="gap:14px;flex-wrap:nowrap;align-items:flex-start"><span class="tile">${ic('qr')}</span><div><p class="t-strong">QR platby s variabilním symbolem</p><p class="t-cap">Každá přihláška má vlastní variabilní symbol. Po přijetí platby stačí kliknout na „Zaplaceno“ a účastníkovi přijde potvrzení e-mailem.</p></div></div>
+    <div class="stack"><p class="t-title">Čeká na platbu (${wait.length})</p><div class="card atable">${wait.map(row).join('')||'<p class="t-cap" style="padding:14px">Vše zaplaceno.</p>'}</div></div>
+    <div class="stack"><p class="t-title">Zaplaceno (${done.length})</p><div class="card atable">${done.map(row).join('')}</div></div>`);
+  root.querySelectorAll('[data-pay]').forEach(b=>b.onclick=()=>{PAYSTATE[b.dataset.pay]=true;toast('Platba potvrzena, účastníkovi odešel e-mail');vLPlat()});
+}
+document.addEventListener('click',e=>{if(e.target.closest('[data-demo]')){e.preventDefault();toast('V ukázce není aktivní')}});
 
 /* ================= HELPERS (app) ================= */
 function cover(c,size,cls=''){return `<span class="tsi cov ${cls}" style="--s:${size}px" aria-hidden="true"><span class="tsi-tile"><span class="cov-ic">${ic(c.icon).replace('stroke="currentColor"','stroke="url(#tsIco)"')}</span></span></span>`}

@@ -1495,7 +1495,7 @@ async function syncRemote(){if(syncing)return syncing;syncing=(async()=>{try{
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&['konfigurator','napady'].includes(curRoute()))syncRemote()});
 function setSaveUI(t){saveState=t;document.querySelectorAll('.savest').forEach(el=>el.textContent=t)}
 
-const BASE=52000;
+const BASE=64000;
 const ADDS={pass:2000,google:2000,pairing:8000,gateway:12000,crm2:8000,videos:8000,workbook:4000,auto:4000,invoices:6000,sellCourse:8000,codes:4000};
 const ADDNAMES={pass:'Přihlášení e-mailem a heslem',google:'Přihlášení přes Google',pairing:'Automatické párování plateb',gateway:'Platební brána',crm2:'Rozšířená administrace',videos:'Videokurz s vlastními videi',workbook:'Přepis workbooku do kapitol',auto:'Automatické e-maily',invoices:'Automatické faktury',sellCourse:'Prodej videokurzu samostatně',codes:'Slevové kódy a poukazy'};
 function selectedAdds(){const a=[];if(CFG.login==='pass')a.push('pass');['google','pairing','gateway','crm2','videos','workbook','auto','invoices','sellCourse','codes'].forEach(k=>{if(CFG[k])a.push(k)});return a}

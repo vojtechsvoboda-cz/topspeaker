@@ -931,6 +931,10 @@ html,body{height:auto!important;min-height:100%}
 
 /* v17 */
 .vtop{flex-wrap:nowrap}
+.vtl-cfg{width:100%;margin:6px 0 2px}.intro .vlegend{margin:0}
+@media (min-width:921px) and (max-width:1180px){.vtl-cfg{grid-template-columns:1fr 1fr}}
+.vprice{display:flex;flex-direction:column;gap:2px;padding:10px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:4px 0}
+.vprice b{font-family:var(--fd);font-size:20px;font-weight:500;color:#eef5ff;font-variant-numeric:tabular-nums}
 .vst{align-self:flex-start}
 .vcard .t-title{margin-top:2px}
 .infopage{max-width:1180px}
@@ -1528,9 +1532,20 @@ function verLegend(){return `<p class="vlegend">${ic('bulb')}<span>Štítek <b>V
 function noteBox(key){const v=CFG.notes[key]||'';return `<div class="nbox"><button class="addnote" data-nt="${key}">${ic('note')}${v?'Poznámka':'Přidat poznámku'}</button><textarea data-nta="${key}" placeholder="Poznámka k tomuto kroku" ${v?'':'hidden'}>${esc(v)}</textarea></div>`}
 function lbl(t,sub){return `<div class="glbl"><span>${t}</span>${sub?`<span class="t-cap">${sub}</span>`:''}</div>`}
 
+function verPrices(){
+  const V2=['google','pairing','crm2','auto','invoices'],V3=['gateway','sellCourse','codes'];
+  const calc=on=>{const C=Object.assign(CFG0(),{videos:false,workbook:false});on.forEach(k=>C[k]=true);const sv=CFG;CFG=C;const p=priceOf();CFG=sv;return p.intro};
+  const m=calc([]),v2=calc(V2),v3=calc(V2.concat(V3));
+  const P=[['Hotovo','V ceně MVP',''],['Teď se naceňuje','od '+fmtK(m),'Pilotní cena základu'],['Možnost navíc','cca '+fmtK(v2),'+ '+fmtK(v2-m)+' k MVP'],['Možnost navíc','cca '+fmtK(v3),'+ '+fmtK(v3-m)+' k MVP, včetně verze 2']];
+  return `<div class="vtl vtl-cfg">${VERSIONS.map((v,i)=>`<article class="vcard ${i===0?'is-done':i===1?'is-next':''}"><div class="vtop"><span class="tile">${ic(v.icon)}</span><span class="vk">${v.k}</span></div>
+    <span class="pill vst ${i<2?'blue':''}">${i===0?ic('check'):''}${P[i][0]}</span><p class="t-title">${v.t}</p>
+    <div class="vprice"><b>${P[i][1]}</b>${P[i][2]?`<span class="t-cap">${P[i][2]}</span>`:''}</div>
+    <ul class="vlist">${v.f.slice(0,4).map(x=>`<li>${ic(i===0?'check':'chev')}<span>${x}</span></li>`).join('')}</ul></article>`).join('')}</div>
+    <p class="vlegend">${ic('bulb')}<span>Teď se naceňuje <b>MVP</b>. Funkce z <b>verze 2</b> a <b>verze 3</b> jde zapnout rovnou v konfigurátoru, nebo je přidat později. Uvedené jsou pilotní ceny bez videokurzu.</span></p>`}
 function stepBody(id){
   if(id==='uvod')return `<div class="intro"><div class="intro-ic">${tsIcon(72)}</div><h2 class="t-display">Konfigurátor aplikace</h2>
     <p class="t-cap xlead">Přehled toho, co bude umět první ostrá verze, výběr doplňků a cena podle zvoleného rozsahu. Na konci se výběr odešle. Vše se průběžně ukládá, takže se k němu jde kdykoliv vrátit, i z jiného zařízení.</p>
+    ${verPrices()}
     <div class="intro-grid">${CSTEPS.slice(1,-1).map(s=>`<span class="ig">${ic(s.i)}${s.t}</span>`).join('')}</div>
     <p class="t-cap">Podrobnosti k platbám, provozu a datům jsou u jednotlivých kroků a v sekci Jak to bude fungovat na rozcestníku.</p></div>`;
   if(id==='zaklad')return `<div class="basehead card"><div><p class="t-cap">Běžná cena základu</p><p class="bprice">${fmtK(BASE)}</p></div><p class="t-cap">Od návrhu po spuštění: vše potřebné k tomu, aby se účastníci přihlásili, zaplatili a lektor je měl v administraci.</p></div>

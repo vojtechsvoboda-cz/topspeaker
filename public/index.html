@@ -916,6 +916,13 @@ html,body{height:auto!important;min-height:100%}
 @media (max-width:420px){.bgrid{grid-template-columns:1fr!important}}
 @media (min-width:561px) and (max-width:680px){.steps3{grid-template-columns:repeat(3,1fr)}.qrv{grid-template-columns:1fr 1fr}.grid2x{grid-template-columns:1fr 1fr}.pair{grid-template-columns:1fr 1fr}}
 .stp-n svg{width:13px;height:13px}
+/* v16: stepper fits without sideways scrolling */
+.cfgpage{max-width:1200px}
+.stp-in{display:grid!important;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px;overflow:visible!important;max-width:1200px}
+.stp{flex-direction:column;justify-content:flex-start;gap:5px;padding:6px 2px 8px!important;border-radius:12px!important;font-size:12px!important;min-width:0;text-align:center}
+.stp>span:last-child{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stp-bar{max-width:1200px}
+@media (max-width:760px){.stp>span:last-child{display:none}.stp{padding:6px 0!important}}
 </style>
 
 </head>
@@ -1391,12 +1398,22 @@ const CFG0=()=>({id:(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Ma
 let CFG=CFG0();
 try{const r=localStorage.getItem(CKEY);if(r)CFG=Object.assign(CFG0(),JSON.parse(r))}catch(e){}
 let saveT=null,saveState='';
-function cfgSave(remote=true){try{localStorage.setItem(CKEY,JSON.stringify(CFG))}catch(e){}
-  if(!remote)return;clearTimeout(saveT);setSaveUI('Ukládám…');saveT=setTimeout(()=>pushCfg('draft'),900)}
+const LOCALONLY=['step','seen'];
+function cfgSave(remote=true){if(remote)CFG.updatedAt=new Date().toISOString();try{localStorage.setItem(CKEY,JSON.stringify(CFG))}catch(e){}
+  if(!remote)return;clearTimeout(saveT);setSaveUI('Ukládám…');saveT=setTimeout(()=>pushCfg(CFG.sentAt?'sent':'draft'),700)}
 async function pushCfg(status){
-  const body=Object.assign({},CFG,{status,price:priceOf(),updatedAt:new Date().toISOString()});
+  const body=Object.assign({},CFG,{status,price:priceOf()});LOCALONLY.forEach(k=>delete body[k]);
   try{const r=await fetch('/api/konfigurace',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)});if(!r.ok)throw 0;setSaveUI('Uloženo');return true}
-  catch(e){setSaveUI('Uloženo v tomto prohlížeči');return false}}
+  catch(e){setSaveUI(PATHMODE?'Nepodařilo se uložit, zkus to znovu':'Uloženo jen v tomto prohlížeči');return false}}
+/* shared record: everyone with the password sees the same answers */
+let syncing=null;
+async function syncRemote(){if(syncing)return syncing;syncing=(async()=>{try{
+  const r=await fetch('/api/konfigurace',{cache:'no-store'});if(!r.ok)return;const d=await r.json();if(!d||!d.updatedAt)return;
+  if(CFG.updatedAt&&d.updatedAt<=CFG.updatedAt)return;
+  const keep={};LOCALONLY.forEach(k=>keep[k]=CFG[k]);CFG=Object.assign(CFG0(),d,keep);if(CFG.ideas&&Object.keys(CFG.ideas).some(k=>/^\d+$/.test(k)))CFG.ideas={};
+  cfgSave(false);setSaveUI('Načteno');const rt=curRoute();if(rt==='konfigurator')vConfig();else if(rt==='napady')vIdeas();
+}catch(e){}finally{syncing=null}})();return syncing}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&['konfigurator','napady'].includes(curRoute()))syncRemote()});
 function setSaveUI(t){saveState=t;document.querySelectorAll('.savest').forEach(el=>el.textContent=t)}
 
 const BASE=50000;
@@ -1433,7 +1450,7 @@ function lbl(t,sub){return `<div class="glbl"><span>${t}</span>${sub?`<span clas
 
 function stepBody(id){
   if(id==='uvod')return `<div class="intro"><div class="intro-ic">${tsIcon(72)}</div><h2 class="t-display">Konfigurátor aplikace</h2>
-    <p class="t-cap xlead">Za pár minut projdeš, co bude umět první ostrá verze, vybereš, co chceš navíc, a rovnou uvidíš cenu. Na konci mi to odešleš. Rozpracované se průběžně ukládá.</p>
+    <p class="t-cap xlead">Za pár minut projdeš, co bude umět první ostrá verze, vybereš, co chceš navíc, a rovnou uvidíš cenu. Na konci mi to odešleš. Všechno se průběžně ukládá, takže se k tomu můžeš kdykoliv vrátit, i z jiného zařízení.</p>
     <div class="intro-grid">${CSTEPS.slice(1,-1).map(s=>`<span class="ig">${ic(s.i)}${s.t}</span>`).join('')}</div>
     <p class="t-cap">Podrobnosti k platbám, provozu a datům najdeš v sekci <button class="linkb" data-go="jak-to-funguje">Jak to bude fungovat</button>.</p></div>`;
   if(id==='zaklad')return `<div class="basehead card"><div><p class="t-cap">Běžná cena základu</p><p class="bprice">${fmtK(BASE)}</p></div><p class="t-cap">Všechno, co appka potřebuje, aby se do ní lidé přihlásili, zaplatili a ty je viděl v přehledu.</p></div>
@@ -1524,7 +1541,7 @@ function cDrawStep(){
   bindSw(m,'care',CFG.care,v=>{CFG.care=v;cfgSave();careText();cDrawSum()});careText();
   bindSw(m,'vat',CFG.vat,v=>{CFG.vat=v;cfgSave()});
   bindSw(m,'pay',CFG.pay,v=>{CFG.pay=v;cfgSave();$('#schedHost').innerHTML=schedHTML(priceOf())});
-  const sb=$('#sendBtn');if(sb)sb.onclick=async()=>{sb.disabled=true;CFG.sentAt=new Date().toISOString();cfgSave(false);const ok=await pushCfg('sent');
+  const sb=$('#sendBtn');if(sb)sb.onclick=async()=>{sb.disabled=true;CFG.sentAt=new Date().toISOString();CFG.updatedAt=CFG.sentAt;CFG.justSent=true;cfgSave(false);const ok=await pushCfg('sent');CFG.justSent=false;cfgSave(false);
     $('#sendBox').innerHTML=sentHTML();toast(ok?'Odesláno':'Uloženo jen v tomto prohlížeči. Zkus to prosím znovu na webu.');const b2=$('#sendBtn');if(b2)b2.onclick=()=>cDrawStep()};
 }
 function cDrawSum(){
@@ -1551,11 +1568,11 @@ function vIdeas(){
   const votes=[['yes','Chci'],['maybe','Možná'],['no','Ne']];
   root.innerHTML=`<div class="page xpage view">${pageTop('Nápady')}
    <header class="xhero"><span class="tag-k">Nápady</span><h1 class="t-display">Kam může TOP Speaker růst</h1><p class="t-cap xlead">Nápady mimo MVP, zatím nenaceněné. U každého můžeš dát vědět, jestli tě zajímá. Odpovědi se uloží ke konfiguraci.</p></header>
-   <div class="ideas">${IDEAS.map((x,i)=>{const v=CFG.ideas[i]||'';return `<article class="card idea glow"><span class="tile">${ic(x[0])}</span><p class="t-strong">${x[1]}</p><p class="t-cap">${x[2]}</p>
+   <div class="ideas">${IDEAS.map((x,i)=>{return `<article class="card idea glow"><span class="tile">${ic(x[0])}</span><p class="t-strong">${x[1]}</p><p class="t-cap">${x[2]}</p>
      <div class="sw sw3 small" data-sw="idea${i}"><span class="sw-th"></span>${votes.map(([k,t])=>`<button data-v="${k}">${t}</button>`).join('')}</div></article>`}).join('')}</div>
    <button class="card cta glow" data-go="konfigurator"><span class="tile">${ic('stack3')}</span><div><p class="t-title">Konfigurátor aplikace</p><p class="t-cap">Vyber rozsah MVP a pošli mi ho.</p></div>${ic('arrow','class="chev"')}</button>
    ${credit()}</div>`;
-  IDEAS.forEach((_,i)=>bindSw(root,'idea'+i,CFG.ideas[i]||'',v=>{CFG.ideas[i]=v;cfgSave()}));
+  IDEAS.forEach((x,i)=>bindSw(root,'idea'+i,CFG.ideas[x[1]]||'',v=>{CFG.ideas[x[1]]=v;cfgSave()}));
 }
 
 /* hub previews for new doors */
@@ -1622,8 +1639,8 @@ function render(){
   if(!r.startsWith('app')){shellBuilt=false;
     if(r==='pracovni-list'||r==='list')return vList();
     if(r==='jak-to-funguje')return vInfo();
-    if(r==='konfigurator')return vConfig();
-    if(r==='napady')return vIdeas();
+    if(r==='konfigurator'){vConfig();syncRemote();return}
+    if(r==='napady'){vIdeas();syncRemote();return}
     if(r==='lektor')return vLektor();
     return vHub();
   }

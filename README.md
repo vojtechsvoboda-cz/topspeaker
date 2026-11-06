@@ -2,8 +2,8 @@
 
 Klikací koncept aplikace pro workshop TOP Speaker (Jakub Stejskal, PromoPeople).
 
-- `index.html` je celá stránka v jednom souboru (styly, skripty i obrázky uvnitř).
-- Heslo pro vstup: `topspeaker` nebo `Jakub Stejskal`. Je to jen zámek prototypu, ne skutečné zabezpečení.
-- Data (diagnostika, odpovědi, přihlášky) se ukládají jen v prohlížeči.
+- `public/index.html`: celá stránka v jednom souboru (rozcestník, beta appka, pracovní list, přehled pro lektora, Jak to bude fungovat, Konfigurátor aplikace, Nápady).
+- `src/worker.js`: servíruje stránku (adresy bez `#`, např. `/konfigurator`) a ukládá odpovědi z konfigurátoru do KV `topspeaker-konfigurace` pod klíčem `konfigurace:<id>`.
+- Heslo pro vstup: `topspeaker` nebo `Jakub Stejskal`. Je to jen zámek prototypu.
 
 Návrh: [vojtechsvoboda.cz](https://vojtechsvoboda.cz)
